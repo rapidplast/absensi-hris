@@ -18,16 +18,15 @@ pipeline {
                 }
             }
         }
-        post {
-            success {
-                slackSend message "Horraayy.. Build Successfully!! Please Check ${JOB_NAME} ${BUILD_NUMBER} ${BUILD_URL}"
-            }
-            failure {
-                slackSend message "Ups.. Build failed :( Please Check ${JOB_NAME} ${BUILD_NUMBER} ${BUILD_URL}"
-            }
-        } 
     }
-    
+    post {
+        always {
+            slackSend channel: "absensi-hris", message "Horraayy.. Build Successfully!! Please Check ${JOB_NAME} ${BUILD_NUMBER} ${BUILD_URL}"
+        }
+        // failure {
+        //     slackSend message "Ups.. Build failed :( Please Check ${JOB_NAME} ${BUILD_NUMBER} ${BUILD_URL}"
+        // }
+    }
 }
 
 //sonar-scanner -Dsonar.projectKey=absensi-hris -Dsonar.sources=. -Dsonar.host.url=http://192.168.0.148:9001 -Dsonar.login=squ_175ecda06fd371771c341a2afad612bb9839deac
