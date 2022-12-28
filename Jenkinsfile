@@ -21,10 +21,10 @@ pipeline {
     }
     post {
         success {
-            slackSend "Horraayy.. Build Successfully!! => ${JOB_NAME} ${BUILD_NUMBER} (<${BUILD_URL}|Open>)"
+            slackSend message "Horraayy.. Build Successfully!! Please Check ${JOB_NAME} ${BUILD_NUMBER} ${BUILD_URL}"
         }
         failure {
-            slackSend "Ups.. Build failed :( => ${JOB_NAME} ${BUILD_NUMBER} (<${BUILD_URL}|Open>)"
+            slackSend message "Ups.. Build failed :( Please Check ${JOB_NAME} ${BUILD_NUMBER} ${BUILD_URL}"
         }
     }
 }
