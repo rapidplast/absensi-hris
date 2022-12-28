@@ -12,6 +12,7 @@ class ProfileController extends Controller
 {
     function index($id){
         $profil = User::where('id', $id)->first();
+        // return response()->json($profil->email);
         return view('admin.profil.index', compact(['profil', 'id']));
     }
 

@@ -44,36 +44,40 @@
                         @csrf
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-md-3">
+                                
+                                <div class="col-md-4">
                                     <span>Dari Tanggal</span>
                                     <input type="date" id="tanggal" name="tanggal" class="form-control" value="{{$tanggalCetak}}" required>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <span>Ke Tanggal</span>
                                     @if(Route::is('searchAbsensi'))
                                     <input type="date" id="tanggal2" name="tanggal2" class="form-control" value="{{ $tanggal2}}" required>
                                     @else
                                     <input type="date" id="tanggal2" name="tanggal2" class="form-control" value="{{$tanggalCetak}}" required>
-                                    @endif
+                                   
                                 </div>
-                                <!-- <div class="col-md-1 text-center">
+                                {{-- <div class="col-md-1 text-center">
                                     <button type="button" id="sync-absensi" class="btn btn-warning mt-4">
                                         Tarik Absensi
                                     </button>
-                                </div> -->
+                                </div> --}}
+                               @if(Auth()->user()->role->id == 1 )
                                 <div class="col-md-2 text-right">
                                     <button type="button" id="sync-absensi3" class="btn btn-warning mt-4">
                                         Tarik Attendance
                                     </button>
                                 </div>
-                                <!--<div class="col-md-1 text-center">
+                                @endif
+                                {{-- <div class="col-md-1 text-center">
                                     <button type="button" id="sync-absensi2" class="btn btn-danger mt-4">
                                         Tarik Log 
                                     </button>
-                                </div>-->
-                                <div class="col-md-2 ">
+                                </div> --}}
+                                <div class="col-md-2">
                                     <button type="submit" class="btn btn-success mt-4">Load Data</button>
                                 </div>
+                                @endif
                             </div>
                         </div>
                     </form>
@@ -83,6 +87,21 @@
                 <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Data Absensi</h3>
+                   @if(Auth()->user()->role->id == 1 )
+                    @if(Route::is('searchAbsensi'))
+                    <a href="{{route('cetakSearch.TXT', ['tanggal' => $tanggal, 'tanggal2' => $tanggal2, 'dbName' => $dbName])}}">
+                        <button type="button" class="btn btn-warning btn-sm float-right mr-2 text-center" >
+                            CetakB .TXT
+                        </button>
+                    </a>
+                @else
+                
+                    <a href="{{route('cetak.TXT', ['tanggal' => $tanggal, 'dbName' => $dbName])}}">
+                        <button type="button" class="btn btn-warning btn-sm float-right mr-2 text-center" >
+                            CetakB .TXT
+                        </button>
+                    </a>
+                @endif
                     {{-- @if(Route::is('searchAbsensi'))
                         <a href="{{route('cetakSearch.TXT', ['tanggal' => $tanggal, 'tanggal2' => $tanggal2, 'dbName' => $dbName])}}">
                             <button type="button" class="btn btn-warning btn-sm float-right mr-2" >
@@ -96,25 +115,13 @@
                             </button>
                         </a>
                     @endif --}}
-                    @if(Route::is('searchAbsensi'))
-                    <a href="{{route('cetakSearch.TXT', ['tanggal' => $tanggal, 'tanggal2' => $tanggal2, 'dbName' => $dbName])}}">
-                        <button type="button" class="btn btn-warning btn-sm float-right mr-2" >
-                            CetakB .TXT
-                        </button>
-                    </a>
-                @else
-                    <a href="{{route('cetak.TXT', ['tanggal' => $tanggal, 'dbName' => $dbName])}}">
-                        <button type="button" class="btn btn-warning btn-sm float-right mr-2" >
-                            CetakB .TXT
-                        </button>
-                    </a>
-                @endif
+                    
                     <a href="{{route('addAbsen')}}" class="text-decoration-none">
                         <button type="button" class="btn btn-sm btn-success float-right">
                             Tambah Data
                         </button>
                     </a>
-                
+                @endif
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -159,8 +166,10 @@
                             <td>{{$data->absen2}}</td>
                             <td>{{$data->izin}}</td>
                             <td>
+                               @if(Auth()->user()->role->id == 1 )
                                 <a href="{{ route('editAbsensi',['id' => $data->id, 'pid' => $data->pid, 'date' => date('Y-m-d', strtotime($data->sync_date))]) }}"  class="btn btn-sm btn-warning">Ubah</a>
                                 <button class="btn btn-sm btn-danger" id="btn-delete" onclick="destroy('{{$data->id}}')">Hapus</button>
+                                @endif
                             </td>
                         </tr>
                         @endforeach

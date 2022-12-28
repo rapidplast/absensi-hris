@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Session;
 class LoginController extends Controller
 {
     function index(Request $request){
+        
         if($request->method() == 'GET'){
             return view('auth.login');
         }elseif($request->method() == 'POST'){

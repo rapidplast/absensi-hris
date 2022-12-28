@@ -20,6 +20,7 @@ use App\Http\Controllers\Backend\LaporanAbsensiController;
 use App\Http\Controllers\Backend\MesinController;
 use App\Http\Controllers\Backend\ReferensiKerjaController;
 use App\Http\Controllers\Backend\ReguKerjaController;
+use App\Http\Controllers\Backend\SelfAttController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\WorkFromHomeController;
 use App\Http\Controllers\Backend\UsersController;
@@ -51,8 +52,17 @@ Route::get('/dev',[DevController::class, 'syncData'])->name('dev');
 
 Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/pegawai', [PegawaiController::class, 'index'])->name('pegawaii');
+ 
 
-    // =============== Admin =============== //
+    Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensii');
+    // Self Attendance
+    Route::get('/self', [SelfAttController::class, 'index'])->name('self');
+    Route::post('/Cari-DataS', [SelfAttController::class, 'index'])->name('searchSelf');
+       // // Profile 
+    Route::get('/{id}', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/Edit-Data/{id}', [ProfileController::class, 'edit'])->name('profilEditt');
+    //Admin  
     Route::group(['roles' => 'Admin', 'prefix' => 'Admin'], function(){
 
         // Route::get('/txt', function(){
@@ -91,7 +101,6 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
 
         });
 
-        
         // ========== Absensi Route ========== //
         Route::group(['prefix' => 'Absensi'], function(){
             Route::get('/', [AbsensiController::class, 'index'])->name('absensi');
@@ -100,7 +109,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             // Tambah Data Absensi 
             Route::get('/Tambah-Data/Create-Data', [AbsensiController::class, 'store'])->name('storeAbsen');
             // Data Synchronous Data
-            Route::get('/Data-Synchronous-Absensi', [AbsensiController::class, 'syncData'])->name('syncDataAbsensi');
+            Route::post('/Data-Synchronous-Absensi', [AbsensiController::class, 'syncData'])->name('syncDataAbsensi');
             // Data Synchronous Data
             Route::post('/Data-Synchronous-Absensi2', [AbsensiController::class, 'syncData2'])->name('syncDataAbsensi');
             // Cetak Absensi TXT
@@ -135,7 +144,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
         // ========== Attendance Real ========== //
         Route::group(['prefix' => 'AttR'], function(){
             Route::get('/', [attRController::class, 'index'])->name('attendance');   
-            Route::post('/sync-dt', [attRController::class, 'syncData'])->name('syncR');                             
+            // Route::post('/sync-dt', [attRController::class, 'syncData'])->name('syncR');                             
             Route::post('Cari-Data', [attRController::class, 'index'])->name('searchAbsensilog');
         });
 
@@ -283,6 +292,16 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
         // ========== Absensi Work From Home Route ========== //
     });
 
+    //USER
+    // Route::group(['roles' => 'Pegawai', 'prefix' => 'Pegawai'], function(){
+    //     Route::group(['prefix' => 'Pegawai'], function(){
+    //         Route::get('/', [PegawaiController::class, 'index'])->name('pegawai');
+    //     });
 
-    // ========****************************======= Admin ========****************************======= //
+    //     Route::group(['prefix' => 'Absensi'], function(){
+    //         Route::get('/', [AbsensiController::class, 'index'])->name('absensi');
+    //         Route::post('Cari-Data', [AbsensiController::class, 'index'])->name('searchAbsensi');
+    //     });
+        
+    // });
 });

@@ -217,11 +217,13 @@ class PegawaiController extends Controller
         foreach($pegawai as $data){
             $check = Pegawai::where('pid', $data[0])->first();
             $email = User::where('email', $data[1].'@gmail.com')->first();
+            // return response()->json($email);
             if(empty($check)){
                 $user               = new User();
                 $user->role_id      = 2;
                 $user->name         = $data[1];
                 if($email){
+                    // return response()->json($email);
                     $user->email        = $data[1].''.rand(10,100).'2@gmail.com';
                 }else{
                     $user->email        = $data[1].'@gmail.com';
@@ -234,6 +236,7 @@ class PegawaiController extends Controller
                 Pegawai::insert([
                     'user_id'       => $user->id,
                     'jabatan_id'    => 61,
+                    'email'         => $user->email,
                     'pid'           => $data[0],
                     'nama'          => $data[1],
                     'created_at'    => Carbon::now(),

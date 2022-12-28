@@ -1,4 +1,4 @@
-@extends('layouts.index', [$title = 'Absensi Log Pegawai'])
+@extends('layouts.index', [$title = 'Absensi Pegawai'])
 
 @section('content')
 @if(Session::has('alert'))
@@ -40,25 +40,27 @@
                             <i class="fas fa-question"></i>
                         </button>
                     </div>
-                    <form action="{{route('searchAbsensilog')}}" method="POST" enctype="multipart/form-data" id="form-data">
+                    <form action="{{route('searchSelf')}}" method="POST" enctype="multipart/form-data" id="form-data">
                         @csrf
                         <div class="card-body">
                             <div class="row">
+                                
                                 <div class="col-md-4">
                                     <span>Dari Tanggal</span>
                                     <input type="date" id="tanggal" name="tanggal" class="form-control" value="{{$tanggalCetak}}" required>
                                 </div>
                                 <div class="col-md-4">
                                     <span>Ke Tanggal</span>
-                                    @if(Route::is('searchAbsensilog'))
-                                    <input type="date" id="tanggal2" name="tanggal2" class="form-control" value="{{ $tanggal2}}" required>
+                                    @if(Route::is('searchSelf'))
+                                    <input type="date" id="tanggal2" name="tanggal2" class="form-control" value="{{$tanggal2}}" required>
                                     @else
                                     <input type="date" id="tanggal2" name="tanggal2" class="form-control" value="{{$tanggalCetak}}" required>
                                     @endif
                                 </div>
-                                <div class="col-md-2 text-center">
+                                <div class="col-md-2">
                                     <button type="submit" class="btn btn-success mt-4">Load Data</button>
                                 </div>
+                                
                             </div>
                         </div>
                     </form>
@@ -66,7 +68,7 @@
             </div>
             <div class="col-md-12">
                 <div class="card">
-
+   
                 <!-- /.card-header -->
                 <div class="card-body">
                     <table id="example1" class="table table-bordered table-striped dataTable" aria-describedby="example1_info">
@@ -75,10 +77,18 @@
                         <th>No</th>
                         <th>NIP</th>
                         <th>Nama</th>
-                        <th>Departement</th>
                         <th>Tanggal</th>
-                        <th>Jam</th>
-                       
+                        <th>Check In</th>
+                        <th>Check Out</th>
+                        <th>Telat</th>
+                        <th>Check In 1</th>
+                        <th>Check Out 1</th>
+                        <th>Check In 2</th>
+                        <th>Check Out 2</th>
+                        <th>Absen 1</th>
+                        <th>Absen 2</th>
+                        <th>Izin</th>
+                        <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -87,23 +97,46 @@
                         ?>
                         @foreach($absensi as $data)
                         <tr>
-                            <td>{{$no++}}</td>
+                            <td>{{$data->id}}</td>
                             <td>{{$data->pid}}</td>
                             <td>{{$data->nama}}</td>
-                            <td>{{$data->departement}}</td>
-                            <td>{{date('d F Y', strtotime($data->tanggal))}}</td>
-                            <td>{{$data->jam}}</td>                            
+                            <td>{{date('d F Y', strtotime($data->sync_date))}}</td>
+                            <td>{{$data->check_in}}</td>
+                            <td>{{$data->check_out}}</td>
+                            <td>{{$data->telat}}</td>
+                            <td>{{$data->check_in1}}</td>
+                            <td>{{$data->check_out1}}</td>
+                            <td>{{$data->check_in2}}</td>
+                            <td>{{$data->check_out2}}</td>
+                            <td>{{$data->absen1}}</td>
+                            <td>{{$data->absen2}}</td>
+                            <td>{{$data->izin}}</td>
+                            <td>
+                               @if(Auth()->user()->role->id == 1 )
+                                <a href="{{ route('editAbsensi',['id' => $data->id, 'pid' => $data->pid, 'date' => date('Y-m-d', strtotime($data->sync_date))]) }}"  class="btn btn-sm btn-warning">Ubah</a>
+                                <button class="btn btn-sm btn-danger" id="btn-delete" onclick="destroy('{{$data->id}}')">Hapus</button>
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
                         <tr>
                             <th>No</th>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Departement</th>
-                        <th>Tanggal</th>
-                        <th>Jam</th>
+                            <th>NIP</th>
+                            <th>Nama</th>
+                            <th>Tanggal</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Telat</th>
+                            <th>Check In 1</th>
+                            <th>Check Out 1</th>
+                            <th>Check In 2</th>
+                            <th>Check Out 2</th>
+                            <th>Absen 1</th>
+                            <th>Absen 2</th>
+                            <th>Izin</th>
+                            <th>Action</th>
                         </tr>
                     </tfoot>
                     </table>
@@ -195,4 +228,112 @@
         })
     })
 </script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#sync-absensi2').on('click', function(e){
+            e.preventDefault();
+
+            let tanggal = $('#tanggal').val();
+            let tanggal2 = $('#tanggal2').val();
+
+            $.ajaxSetup({
+                headers : {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            })
+
+                    $.ajax({
+                        url     : "{{url('Admin/Absensi/Data-Synchronous-Absensi2')}}",
+                        method  : "POST",
+                        data    : {tanggal:tanggal, tanggal2:tanggal2},
+                        success : function(success){
+                            console.log(success);
+                            if(success.errors){
+                                swal("GAGAL!", success.errors, "error")
+                            }else{
+                                swal("Sukses!", "Berhasil Sync Data Absensi2!", "success");
+                                setInterval(() => {
+                                   window.location.reload();
+                                }, 2000);
+                            }
+                        },
+                        error : function(error){
+                            console.log(error);
+                            swal("Gagal!", "Gagal Sync Data Absensi!\n Periksa Jaringan Anda!", "error");
+                        }
+                    });
+        })
+    })
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#sync-absensi3').on('click', function(e){
+            e.preventDefault();
+
+            let tanggal = $('#tanggal').val();
+            let tanggal2 = $('#tanggal2').val();
+
+            $.ajaxSetup({
+                headers : {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                }
+            })
+
+                    $.ajax({
+                        url     : "{{url('Admin/AttR/sync-dt')}}",
+                        method  : "POST",
+                        data    : {tanggal:tanggal, tanggal2:tanggal2},
+                        success : function(success){
+                            console.log(success);
+                            if(success.errors){
+                                swal("GAGAL!", success.errors, "error")
+                            }else{
+                                swal("Sukses!", "Berhasil Sync Data Attendance!", "success");
+                                setInterval(() => {
+                                   window.location.reload();
+                                }, 2000);
+                            }
+                        },
+                        error : function(error){
+                            console.log(error);
+                            swal("Gagal!", "Gagal Sync Data Attendance!\n Periksa Jaringan Anda!", "error");
+                        }
+                    });
+        })
+    })
+</script>
+<script type="text/javascript">
+    function destroy(id){
+        swal({
+            title: "Anda Yakin?",
+            text: "Untuk menghapus departement ini?",
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true
+        })
+        .then((willDelete) => {
+            if(willDelete) {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                        url: "{{url('Admin/Absensi/Delete')}}/"+id,
+                        method: 'DELETE',
+                        success: function (results) {
+                            swal("Berhasil!", "Data Berhasil Dihapus!", "success");
+                            window.location.reload();
+                        },
+                        error: function (results) {
+                            swal("GAGAL!", "Gagal Menghapus Data!", "error");
+                        }
+                    });
+            }else{
+                swal("Data Departement Batal Dihapus", "", "info")
+            }
+        })
+    }
+</script>
+
 @stop

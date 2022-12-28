@@ -9,11 +9,13 @@ use App\Models\AbsenMentah;
 use App\Models\HariKerja;
 use App\Models\Jadwal;
 use App\Models\Mesin;
+use App\Models\Token;
 use App\Models\Pegawai;
 use App\Models\ReferensiKerja;
 use App\Models\ReguKerja;
 use App\Models\ShiftKerja;
 use Carbon\Carbon;
+use Auth;
 // use Dotenv\Validator;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Http\Request;
@@ -27,7 +29,15 @@ use ZKLibrary;
 class AbsensiController extends Controller
 {
     function index(Request $request){
+        // dd(auth()->user()->email);
         // return csrf_token();
+        // $token = Token::where('_token',$request->_token)->first();
+        // Auth::check();
+        // return response()->json($request->all());
+        // return csrf_token();
+        $absen = Pegawai::where('email', auth()->user()->email)-> first();
+        $email = auth()->user()->email;
+        // return response()->json($absen->pid);
         if($request->method() == 'GET'){
             $date = Carbon::now()->format('Y-m-d');
             $tanggal = Carbon::now()->format('d F Y');
@@ -79,7 +89,7 @@ class AbsensiController extends Controller
         $zk = new ZKLibrary($mesin->tcpip, $port);
         $zk->connect();
         $log_kehadiran = $zk->getAttendance();
-        return response()->json($log_kehadiran);
+        // return response()->json($log_kehadiran);
 
 
         if(!empty($log_kehadiran) == true){
