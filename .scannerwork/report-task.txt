@@ -1,0 +1,6 @@
+projectKey=absensi-hris
+serverUrl=http://192.168.0.85:9001
+serverVersion=9.7.1.62043
+dashboardUrl=http://192.168.0.85:9001/dashboard?id=absensi-hris
+ceTaskId=AYUJaL9iNOf851JgNA1l
+ceTaskUrl=http://192.168.0.85:9001/api/ce/task?id=AYUJaL9iNOf851JgNA1l
