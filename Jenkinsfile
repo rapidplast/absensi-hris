@@ -20,8 +20,8 @@ pipeline {
         }
     }
     post {
-        always {
-            slackSend channel: "absensi-hris", message "Horraayy.. Build Successfully!! Please Check ${JOB_NAME} ${BUILD_NUMBER} ${BUILD_URL}"
+        success {
+            mail body: "Dear All, Please check the ${BUILD_URL} ASAP!!" , cc: '', from: 'NoReplyJenkins', subject: "Job ${JOB_NAME} (${BUILD_NUMBER}) is FAILURE :(", to: 'hafid.rosianto@rapidplast.co.id'
         }
         // failure {
         //     slackSend message "Ups.. Build failed :( Please Check ${JOB_NAME} ${BUILD_NUMBER} ${BUILD_URL}"
