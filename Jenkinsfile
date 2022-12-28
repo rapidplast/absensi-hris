@@ -20,12 +20,18 @@ pipeline {
         }
     }
     post {
-        failure {
-            mail body: "Dear All, Please check the ${BUILD_URL} ASAP!!" , cc: '', from: 'NoReplyJenkins', subject: "Job ${JOB_NAME} (${BUILD_NUMBER}) is FAILURE :(", to: 'hafid.rosianto@rapidplast.co.id'
-        }
         success {
-            mail body: "Dear All, The build is success on ${BUILD_URL}" , cc: '', from: 'NoReplyJenkins', subject: "Job ${JOB_NAME} (${BUILD_NUMBER}) is SUCCESS :D", to: 'hafid.rosianto@rapidplast.co.id'
+            slackSend "Build deployed successfully - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
         }
+        failure {
+            slackSend failOnError:true message:"Build failed  - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)"
+        }
+        // failure {
+        //     mail body: "Dear All, Please check the ${BUILD_URL} ASAP!!" , cc: '', from: 'NoReplyJenkins', subject: "Job ${JOB_NAME} (${BUILD_NUMBER}) is FAILURE :(", to: 'hafid.rosianto@rapidplast.co.id'
+        // }
+        // success {
+        //     mail body: "Dear All, The build is success on ${BUILD_URL}" , cc: '', from: 'NoReplyJenkins', subject: "Job ${JOB_NAME} (${BUILD_NUMBER}) is SUCCESS :D", to: 'hafid.rosianto@rapidplast.co.id'
+        // }
     }
 }
 
