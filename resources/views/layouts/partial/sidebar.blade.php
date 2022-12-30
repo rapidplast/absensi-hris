@@ -36,7 +36,7 @@
           </a>
         </li>
         <li>
-          @if(auth()->id('id') == '1' )
+          @if(Auth()->user()->role->id == 1 )
           <a href="{{route('Users')}}" class="nav-link {{request()->is('Admin/Users') || request()->is('Admin/Users/*') ? 'active' : ''}}">
             <i class="nav-icon fas fa-users"></i>
             <p>
