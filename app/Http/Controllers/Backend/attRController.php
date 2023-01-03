@@ -67,23 +67,28 @@ class attRController extends Controller
         $tanggal2   = $request->tanggal2;
         $mesin      = Mesin::where('is_default', 1)->first();
         $year       = Carbon::now()->format('Y');
+        // $year4      = strtotime($year) + strtotime("-1 years");
+        $year4      = date('Y', strtotime($year. ' - 1 years'));
+        // $year4      = date('Y' , $year4);
         $month      = Carbon::now()->format('m');
         $dbName     = $year .''. $month.'HISTORY';
         $month4     = strtotime($month) + strtotime("-1 month");
         $month4     = date('m', $month4);
-        $dbName4    = $year.''.$month4.'HISTORY';
+        $dbName4    = $year4.''.$month4.'HISTORY';
         $port       = 4370;
 
         $zk         = new ZKLibrary($mesin->tcpip,$port);
+        // $zk         = new ZKLibrary('192.168.0.45',$port);
         $zk->connect();
         $log        = $zk->getAttendance();
-        // return response()->json($log);
+        // return response()->json($dbName4);
 
         if(!empty($log) == true){
+            
             foreach($log as $data){
                 $countData  = count($log) - 1;
                 $checkAbsen = count(AbsenMentah::where(DB::raw('DATE(date)'), date('Y-m-d',strtotime($data[3])))->get());
-
+                // return response()->json($checkAbsen);
                     if($checkAbsen === 0 || is_null($checkAbsen)){
                         for($i = 0 ; $i <= $countData ; $i++){
                             AbsenMentah::insert([
@@ -96,19 +101,20 @@ class attRController extends Controller
                         }
                     }                    
                 }
-                if(strtotime($tanggal) === strtotime($tanggal2)){
-                    $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->get();
-                }else{
-                    $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
-                }
-                    
-                // if(strtotime('2022-11-30') === strtotime('2022-11-30')){
-                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2022-11-30')->get();
+                // if(strtotime($tanggal) === strtotime($tanggal2)){
+                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->get();
                 // }else{
-                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2022-11-30', '2022-11-30'])->get();
+                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
                 // }
+                // return response()->json($checkAbsen);
+                if(strtotime('2023-01-03') === strtotime('2023-01-03')){
+                    $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-01-03')->get();
+                }else{
+                    $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-01-03', '2023-01-03'])->get();
+                }
                 // return response()->json($absenMentah);
                 if(!is_null($absenMentah)){
+                    // return response()->json($absenMentah);
                     foreach($absenMentah as $row){
                         $checkDate  = date('Y-m-d' , strtotime($row->date));
                         $checkPegawai = DB::select("
@@ -119,7 +125,7 @@ class attRController extends Controller
                         SELECT db.* FROM absensi_frhistory.$dbName4 db
                         WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
                         ");
-                        // return response()->json($checkPegawai4);
+                        // return response()->json($checkPegawai);
                         if($checkPegawai === null || empty($checkPegawai) || $checkPegawai == ''){
                             // return response()->json($checkPegawai);
                             $pegawai    = Pegawai::where('pid', $row->pid)->first();

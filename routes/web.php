@@ -144,7 +144,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
         // ========== Attendance Real ========== //
         Route::group(['prefix' => 'AttR'], function(){
             Route::get('/', [attRController::class, 'index'])->name('attendance');   
-            // Route::post('/sync-dt', [attRController::class, 'syncData'])->name('syncR');                             
+            Route::post('/sync-dt', [attRController::class, 'syncData'])->name('syncR');                             
             Route::post('Cari-Data', [attRController::class, 'index'])->name('searchAbsensilog');
         });
 

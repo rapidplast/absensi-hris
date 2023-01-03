@@ -46,6 +46,7 @@
                             <div class="row">
                                 
                                 <div class="col-md-4">
+                                    
                                     <span>Dari Tanggal</span>
                                     <input type="date" id="tanggal" name="tanggal" class="form-control" value="{{$tanggalCetak}}" required>
                                 </div>
@@ -62,13 +63,13 @@
                                         Tarik Absensi
                                     </button>
                                 </div> --}}
-                               @if(Auth()->user()->role->id == 1 )
+                                @if(Auth()->user()->role->id == 1 )
                                 <div class="col-md-2 text-right">
                                     <button type="button" id="sync-absensi3" class="btn btn-warning mt-4">
                                         Tarik Attendance
                                     </button>
                                 </div>
-                                @endif
+                               @endif
                                 {{-- <div class="col-md-1 text-center">
                                     <button type="button" id="sync-absensi2" class="btn btn-danger mt-4">
                                         Tarik Log 
@@ -342,7 +343,7 @@
                             if(success.errors){
                                 swal("GAGAL!", success.errors, "error")
                             }else{
-                                swal("Sukses!", "Berhasil Sync Data Attendance!", "success");
+                                swal("Sukses!", "Berhasil Sync Data Absensi2!", "success");
                                 setInterval(() => {
                                    window.location.reload();
                                 }, 2000);
@@ -350,7 +351,7 @@
                         },
                         error : function(error){
                             console.log(error);
-                            swal("Gagal!", "Gagal Sync Data Attendance!\n Periksa Jaringan Anda!", "error");
+                            swal("Gagal!", "Gagal Sync Data Absensi!\n Periksa Jaringan Anda!", "error");
                         }
                     });
         })
