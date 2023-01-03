@@ -3,9 +3,7 @@
   <!-- Brand Logo -->
   <a href="{{ route('dashboard') }}" class="brand-link text-decoration-none">
     <img src="{{asset('public/backend/file/images/rapidplast.ico')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    {{-- <img src="{{asset('public/backend/file/images/berdikari.ico')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> --}}
     <span class="brand-text font-weight-light">Rapid Plast</span>
-    {{-- <span class="brand-text font-weight-light">PT BMN</span> --}}
   </a>
 
   <!-- Sidebar -->
@@ -35,10 +33,10 @@
             </p>
           </a>
         </li>
-        <li>
+        <li class="nav-item">
           @if(Auth()->user()->role->id == 1 )
           <a href="{{route('Users')}}" class="nav-link {{request()->is('Admin/Users') || request()->is('Admin/Users/*') ? 'active' : ''}}">
-            <i class="nav-icon fas fa-users"></i>
+            <i class="nav-icon fas fa-user-friends"></i>
             <p>
               Data Users
             </p>
@@ -115,7 +113,7 @@
         </li> -->
         <li class="nav-item">
           <a href="{{route('referensiKerja')}}" class="nav-link {{request()->is('Admin/Referensi-Kerja') || request()->is('Admin/Referensi-Kerja/*') ? 'active' : ''}}">
-            <i class="nav-icon fas fa-building"></i>
+            <i class="nav-icon fas fa-briefcase"></i>
             <p>
               Referensi Kerja
             </p>
@@ -123,7 +121,7 @@
         </li>
         <li class="nav-item">
           <a href="{{route('reguKerja')}}" class="nav-link {{request()->is('Admin/Regu-Kerja') || request()->is('Admin/Regu-Kerja/*') ? 'active' : ''}}">
-            <i class="nav-icon fas fa-user"></i>
+            <i class="nav-icon fas fa-users-cog"></i>
             <p>
               Regu Kerja
             </p>
@@ -165,7 +163,7 @@
         </li> -->
         <li class="nav-item">
           <a href="{{route('laporanAbsensi')}}" class="nav-link {{request()->is('Admin/Laporan-Absensi') || request()->is('Admin/Absensi-Work-From-Home/*') ? 'active' : ''}}">
-            <i class="nav-icon fas fa-building"></i>
+            <i class="nav-icon fas fa-file"></i>
             <p>
               Laporan Absensi
             </p>
