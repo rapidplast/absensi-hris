@@ -56,7 +56,7 @@
                                     <input type="date" id="tanggal2" name="tanggal2" class="form-control" value="{{ $tanggal2}}" required>
                                     @else
                                     <input type="date" id="tanggal2" name="tanggal2" class="form-control" value="{{$tanggalCetak}}" required>
-                                   
+                                    @endif
                                 </div>
                                 {{-- <div class="col-md-1 text-center">
                                     <button type="button" id="sync-absensi" class="btn btn-warning mt-4">
@@ -78,7 +78,7 @@
                                 <div class="col-md-2">
                                     <button type="submit" class="btn btn-success mt-4">Load Data</button>
                                 </div>
-                                @endif
+                               
                             </div>
                         </div>
                     </form>
