@@ -247,6 +247,19 @@ class PegawaiController extends Controller
                     'updated_at'    => Carbon::now()
                 ]);
             }
+            if(empty($check->email) || $check->email == null){
+                $check  = Pegawai::where('pid', $data[0])->first(); 
+                if($email){
+                    // return response()->json($check);
+                    $check->email        = $data[1].''.rand(10,100).'2@gmail.com';
+                }else{
+                    $check->email        = $data[1].'@gmail.com';
+                }
+                $check->created_at   = Carbon::now();
+                $check->updated_at   = Carbon::now();
+                $check->save();
+                // return response()->json($check);
+            }
             // return response()->json($check->email);
             $check  = Pegawai::where('pid', $data[0])->first();
             $email1  = User::where('email', $check->email)->first();
