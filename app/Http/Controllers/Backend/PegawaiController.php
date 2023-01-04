@@ -218,7 +218,7 @@ class PegawaiController extends Controller
         foreach($pegawai as $data){
             $check  = Pegawai::where('pid', $data[0])->first();
             // $check  = Pegawai::where('pid', '960314')->first();
-            return response()->json($check);        
+            //return response()->json($check);        
             $email  = User::where('email', $data[1].'@gmail.com')->first();
             // $email  = User::where('email', 'CHOIRUL BASOR@gmail.com')->first();   
             // return response()->json($email);
