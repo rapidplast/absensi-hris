@@ -212,13 +212,13 @@ class PegawaiController extends Controller
         $zk = new ZKLibrary($mesin->tcpip, $port);
         $zk->connect();
         $pegawai = $zk->getUser();
-        return response()->json($pegawai);
+        // return response()->json($pegawai);
 
         foreach($pegawai as $data){
             $check = Pegawai::where('pid', $data[0])->first();
             $email = User::where('email', $data[1].'@gmail.com')->first();
             $email1 = User::where('email', $check->email)->first();
-            return response()->json($email1);
+            // return response()->json($email1);
             if(empty($check)){
                 $user               = new User();
                 $user->role_id      = 2;
