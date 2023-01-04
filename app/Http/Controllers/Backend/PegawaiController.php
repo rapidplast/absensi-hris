@@ -212,13 +212,16 @@ class PegawaiController extends Controller
         $zk = new ZKLibrary($mesin->tcpip, $port);
         $zk->connect();
         $pegawai = $zk->getUser();
+        // $a = count($pegawai);
         // return response()->json($pegawai);
 
         foreach($pegawai as $data){
-            $check = Pegawai::where('pid', $data[0])->first();
-            $email = User::where('email', $data[1].'@gmail.com')->first();
-            $email1 = User::where('email', $check->email)->first();
-            // return response()->json($email1);
+            $check  = Pegawai::where('pid', $data[0])->first();
+            // $check  = Pegawai::where('pid', '960314')->first();
+            // return response()->json($check->email);        
+            $email  = User::where('email', $data[1].'@gmail.com')->first();
+            // $email  = User::where('email', 'CHOIRUL BASOR@gmail.com')->first();   
+            // return response()->json($email);
             if(empty($check)){
                 $user               = new User();
                 $user->role_id      = 2;
@@ -243,19 +246,36 @@ class PegawaiController extends Controller
                     'created_at'    => Carbon::now(),
                     'updated_at'    => Carbon::now()
                 ]);
-                // return response()->json($email);
-            }elseif(empty($email1)){
-                $user               = new User();
-                // return response()->json($email);
-                $user->role_id      = 2;
-                $user->name         = $data[1];
-                $user->email        = $check->email;
-                // return response()->json($data[1]);
-                $user->password     = bcrypt('pegawai');
-                $user->created_at   = Carbon::now();
-                $user->updated_at   = Carbon::now();
-                $user->save();
-        }
+            }
+            // return response()->json($check->email);
+            $check  = Pegawai::where('pid', $data[0])->first();
+            $email1  = User::where('email', $check->email)->first();
+            // $email1  = User::where('email', 'CHOIRUL BASOR@gmail.com')->first();
+            // return response()->json($email1);
+                if(empty($email1)){
+                    $user               = new User();
+                    // return response()->json($data[1]);
+                    $user->role_id      = 2;
+                    $user->name         = $data[1];
+                    $user->email        = $check->email;
+                    // return response()->json($data[1]);
+                    $user->password     = bcrypt('pegawai');
+                    $user->created_at   = Carbon::now();
+                    $user->updated_at   = Carbon::now();
+                    $user->save();
+                    // $user               = new User();
+                    // // return response()->json($email);
+                    // $user->role_id      = 2;
+                    // $user->name         = '960302';
+                    // $user->email        = '960302@gmail.com';
+                    // // return response()->json($data[1]);
+                    // $user->password     = bcrypt('pegawai');
+                    // $user->created_at   = Carbon::now();
+                    // $user->updated_at   = Carbon::now();
+                    // $user->save();
+            }
+            
+        
     }
         // return response()->json($check->user_id);
         Session::put('sweetalert', 'success');
