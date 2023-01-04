@@ -134,7 +134,7 @@
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Enter email"  value="{{ $pegawai->email }}">
+                        <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Enter email"  value="{{ $pegawai->email }}">
 
                         @error('email')
                             <div class="invalid-feedback">

@@ -42,6 +42,22 @@ CREATE TABLE `pegawais` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Gaji --
+CREATE TABLE `gaji` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `pid` bigint(20) UNSIGNED DEFAULT NULL,
+  `sap` bigint(20) UNSIGNED DEFAULT NULL,
+  `hari` bigint(20) NOT NULL,
+  `lembur` bigint(20) NOT NULL,
+  `gaji`varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gaji_lembur` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
 --
 -- Dumping data for table `pegawais`
 --
@@ -713,6 +729,12 @@ ALTER TABLE `pegawais`
   ADD KEY `pegawais_user_id_foreign` (`user_id`),
   ADD KEY `pegawais_jabatan_id_foreign` (`jabatan_id`);
 
+
+
+ALTER TABLE `gaji`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `gaji_pid_foreign` (`pid`);
+  
 --
 -- AUTO_INCREMENT for dumped tables
 --
@@ -724,6 +746,12 @@ ALTER TABLE `pegawais`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=653;
 
 --
+--
+-- AUTO_INCREMENT for table `gaji`
+--
+ALTER TABLE `gaji`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=653;
+
 
 -- ALTER TABLE users add  `pid` bigint(20) NOT NULL after role_id
 
@@ -738,6 +766,13 @@ ALTER TABLE `pegawais`
   ADD CONSTRAINT `pegawais_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
+--
+-- Constraints for table `pegawais`
+--
+ALTER TABLE `gaji`
+  ADD CONSTRAINT `gaji_pid_foreign` FOREIGN KEY (`pid`) REFERENCES `pegawais` (`pid`) ON DELETE CASCADE ON UPDATE CASCADE
+
+COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
