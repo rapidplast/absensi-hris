@@ -211,7 +211,7 @@ use App\Models\User;
 
             $.ajax({
                 url     : "{{url('Admin/Pegawai/synchronous-pegawai')}}",
-                method  : "GET",
+                method  : "POST",
                 success : function(success){
                     swal("Sukses!", "Berhasil Sync Data Pegawai!", "success");
                     setInterval(() => {

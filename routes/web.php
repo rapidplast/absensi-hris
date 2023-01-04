@@ -84,7 +84,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             // Delete Data
             Route::delete('/Delete/{id}', [PegawaiController::class, 'destroy'])->name('destroyPegawai');
             // Sync Pegawai
-            Route::get('/synchronous-pegawai', [PegawaiController::class, 'syncPegawai'])->name('syncPegawai');
+            Route::post('/synchronous-pegawai', [PegawaiController::class, 'syncPegawai'])->name('syncPegawai');
         });
 
         // DATA USERS

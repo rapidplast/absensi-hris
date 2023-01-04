@@ -68,23 +68,29 @@ class attRController extends Controller
         $mesin      = Mesin::where('is_default', 1)->first();
         $year       = Carbon::now()->format('Y');
         // $year4      = strtotime($year) + strtotime("-1 years");
-        $year4      = date('Y', strtotime($year. ' - 1 years'));
+        // $year4      = date('Y', strtotime($year. ' - 1 years'));
         // $year4      = date('Y' , $year4);
         $month      = Carbon::now()->format('m');
         $dbName     = $year .''. $month.'HISTORY';
         $month4     = strtotime($month) + strtotime("-1 month");
         $month4     = date('m', $month4);
+        if($month == 1){
+            $year       = Carbon::now()->format('Y');
+        // $year4      = strtotime($year) + strtotime("-1 years");
+            $year4      = date('Y', strtotime($year. ' - 1 years'));
+        }else{
+            $year4      = Carbon::now()->format('Y');;
+        }
+        // return response()->json($year4);
         $dbName4    = $year4.''.$month4.'HISTORY';
         $port       = 4370;
-
+        // return response()->json($dbName4);
         $zk         = new ZKLibrary($mesin->tcpip,$port);
-        // $zk         = new ZKLibrary('192.168.0.45',$port);
         $zk->connect();
         $log        = $zk->getAttendance();
         // return response()->json($dbName4);
 
         if(!empty($log) == true){
-            
             foreach($log as $data){
                 $countData  = count($log) - 1;
                 $checkAbsen = count(AbsenMentah::where(DB::raw('DATE(date)'), date('Y-m-d',strtotime($data[3])))->get());
@@ -101,20 +107,19 @@ class attRController extends Controller
                         }
                     }                    
                 }
-                // if(strtotime($tanggal) === strtotime($tanggal2)){
-                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->get();
-                // }else{
-                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
-                // }
-                // return response()->json($checkAbsen);
-                if(strtotime('2023-01-03') === strtotime('2023-01-03')){
-                    $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-01-03')->get();
+                if(strtotime($tanggal) === strtotime($tanggal2)){
+                    $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->get();
                 }else{
-                    $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-01-03', '2023-01-03'])->get();
+                    $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
                 }
+                // return response()->json($checkAbsen);
+                // if(strtotime('2023-01-03') === strtotime('2023-01-03')){
+                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-01-03')->get();
+                // }else{
+                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-01-03', '2023-01-03'])->get();
+                // }
                 // return response()->json($absenMentah);
                 if(!is_null($absenMentah)){
-                    // return response()->json($absenMentah);
                     foreach($absenMentah as $row){
                         $checkDate  = date('Y-m-d' , strtotime($row->date));
                         $checkPegawai = DB::select("
@@ -129,9 +134,13 @@ class attRController extends Controller
                         if($checkPegawai === null || empty($checkPegawai) || $checkPegawai == ''){
                             // return response()->json($checkPegawai);
                             $pegawai    = Pegawai::where('pid', $row->pid)->first();
-                        if(!is_null($pegawai)){                            
+                            // return response()->json($pegawai);
+                        if(!is_null($pegawai)){                  
+                            // return response()->json($pegawai);          
                             $clock      = date('H:i:s' , strtotime($row->date));
+                            // return response()->json($clock);
                             if($row->status == 0 || $row->status == 4){
+                                // return response()->json($row->status);
                                 DB::connection('mysql2')->table($dbName)->insert([
                                     'pid'       => $row->pid,
                                     'sap'       => $pegawai->sap,
@@ -162,7 +171,7 @@ class attRController extends Controller
                     if(!is_null($pegawai)){  
                     $clock      = date('H:i:s' , strtotime($row->date));
                     // return response()->json($clock);
-                    if(!empty($checkAbsen->check_out) && $row->status == 0 || $row->status == 4){
+                    if(empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && $row->status == 0 || $row->status == 4){
                         DB::connection('mysql2')->table($dbName)->where([
                             ['pid', $row->pid],
                             [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
@@ -172,7 +181,7 @@ class attRController extends Controller
                             'updated_at' => Carbon::now()
                         ]);
 
-                    }elseif(!empty($checkAbsen->check_in && $row->status == 1 || $row->status == 5)){
+                    }elseif(empty($checkAbsen->check_out) &&!empty($checkAbsen->check_in && $row->status == 1 || $row->status == 5)){
                         DB::connection('mysql2')->table($dbName)->where([
                             ['pid', $row->pid],
                             [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
@@ -223,7 +232,7 @@ class attRController extends Controller
             if(!is_null($pegawai)){  
             $clock      = date('H:i:s' , strtotime($row->date));
             // return response()->json($clock);
-            if(!empty($checkAbsen->check_out) && $row->status == 0 || $row->status == 4){
+            if(empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && $row->status == 0 || $row->status == 4){
                 DB::connection('mysql2')->table($dbName4)->where([
                     ['pid', $row->pid],
                     [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
@@ -233,7 +242,7 @@ class attRController extends Controller
                     'updated_at' => Carbon::now()
                 ]);
 
-            }elseif(!empty($checkAbsen->check_in && $row->status == 1 || $row->status == 5)){
+            }elseif(empty($checkAbsen->check_out)&& !empty($checkAbsen->check_in && $row->status == 1 || $row->status == 5)){
                 DB::connection('mysql2')->table($dbName4)->where([
                     ['pid', $row->pid],
                     [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]

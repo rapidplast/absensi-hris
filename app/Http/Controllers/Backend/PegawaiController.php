@@ -217,7 +217,8 @@ class PegawaiController extends Controller
         foreach($pegawai as $data){
             $check = Pegawai::where('pid', $data[0])->first();
             $email = User::where('email', $data[1].'@gmail.com')->first();
-            // return response()->json($email);
+            
+            // return response()->json($check);
             if(empty($check)){
                 $user               = new User();
                 $user->role_id      = 2;
@@ -242,8 +243,20 @@ class PegawaiController extends Controller
                     'created_at'    => Carbon::now(),
                     'updated_at'    => Carbon::now()
                 ]);
-            }
+            }else{
+                $user               = new User();
+                // return response()->json($user);
+                $user->role_id      = 2;
+                $user->name         = $data[1];
+                $user->email        = $check->email;
+                // return response()->json($data[1]);
+                $user->password     = bcrypt('pegawai');
+                $user->created_at   = Carbon::now();
+                $user->updated_at   = Carbon::now();
+                $user->save();
         }
+    }
+        // return response()->json($check->user_id);
         Session::put('sweetalert', 'success');
         return redirect()->back()->with('alert', 'Sukses Menambahkan pegawai dari mesin fingerprint '.$mesin->ip);
     }

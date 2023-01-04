@@ -724,6 +724,9 @@ ALTER TABLE `pegawais`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=653;
 
 --
+
+-- ALTER TABLE users add  `pid` bigint(20) NOT NULL after role_id
+
 -- Constraints for dumped tables
 --
 
