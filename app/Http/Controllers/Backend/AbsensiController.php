@@ -89,7 +89,7 @@ class AbsensiController extends Controller
         $zk = new ZKLibrary($mesin->tcpip, $port);
         $zk->connect();
         $log_kehadiran = $zk->getAttendance();
-        // return response()->json($log_kehadiran);
+        //  return response()->json($log_kehadiran);
 
 
         if(!empty($log_kehadiran) == true){
@@ -558,6 +558,14 @@ class AbsensiController extends Controller
         $year   = Carbon::now()->format('Y');
         $month  = Carbon::now()->format('m');                
              
+        if($month == 1){
+            $year       = Carbon::now()->format('Y');
+        // $year4      = strtotime($year) + strtotime("-1 years");
+            $year4      = date('Y', strtotime($year. ' - 1 years'));
+        }else{
+            $year4      = Carbon::now()->format('Y');;
+        }
+
         $month4 = strtotime($month) + strtotime("-1 month");
         $month4 = date('m', $month4);
         $month3 = strtotime($month) + strtotime("-2 month");
@@ -568,7 +576,8 @@ class AbsensiController extends Controller
         $month1 = date('m', $month1);
         
         $dbName = $year.''.$month.'HISTORY';
-        $dbName4 = $year.''.$month4.'HISTORY';
+        $dbName4 = $year4.''.$month4.'HISTORY';
+        // dd($dbName4);
         $dbName3 = $year.''.$month3.'HISTORY';
         $dbName2 = $year.''.$month2.'HISTORY';
         $dbName1 = $year.''.$month1.'HISTORY';
@@ -678,6 +687,7 @@ class AbsensiController extends Controller
         
                         $pegawai = Pegawai::where('pid', $absen->pid)->first();
                         $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
+                        // dd($pegawai);
                         $awal   = date_create($reguKerja->tgl_start);
                         $akhir  = date_create(date('Y-m-d', strtotime(Carbon::now())));        
                         $diff   = date_diff($awal,$akhir);
@@ -986,6 +996,13 @@ class AbsensiController extends Controller
         $year   = Carbon::now()->format('Y');
         $month  = Carbon::now()->format('m');
         $dbName = $year.''.$month.'HISTORY';
+        if($month == 1){
+            $year       = Carbon::now()->format('Y');
+        // $year4      = strtotime($year) + strtotime("-1 years");
+            $year4      = date('Y', strtotime($year. ' - 1 years'));
+        }else{
+            $year4      = Carbon::now()->format('Y');;
+        }
         // return response()->json($dbName);
         //GET 5 MONTH BEFORE//
         $month4 = strtotime($month) + strtotime("-1 month");
@@ -997,7 +1014,7 @@ class AbsensiController extends Controller
         $month1 = strtotime($month) + strtotime("-4 month");
         $month1 = date('m', $month1);
         $dbName = $year.''.$month.'HISTORY';
-        $dbName4 = $year.''.$month4.'HISTORY';
+        $dbName4 = $year4.''.$month4.'HISTORY';
         $dbName3 = $year.''.$month3.'HISTORY';
         $dbName2 = $year.''.$month2.'HISTORY';
         $dbName1 = $year.''.$month1.'HISTORY';
