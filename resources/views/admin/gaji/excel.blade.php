@@ -1,0 +1,22 @@
+<table>
+    <thead>
+        <tr>
+            <th>NO.ID</th>
+            <th>Tgl/Waktu</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($absen as $data)
+            <tr>
+                <td>{{$data->pid}}</td>
+                <td>{{$data->sync_date}}</td>
+                @if(!empty($data->check_in))
+                    <td>P10</td>
+                @else
+                    <td>P20</td>
+                @endif
+            </tr>
+        @endforeach
+    </tbody>
+</table>

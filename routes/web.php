@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\cetakTxtController;
 use App\Http\Controllers\Backend\CutiController;
 use App\Http\Controllers\Backend\DepartementController;
 use App\Http\Controllers\Backend\DivisiController;
+use App\Http\Controllers\Backend\GajiController;
 use App\Http\Controllers\Backend\HariLiburController;
 use App\Http\Controllers\Backend\LaporanAbsensiController;
 use App\Http\Controllers\Backend\MesinController;
@@ -84,7 +85,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             // Delete Data
             Route::delete('/Delete/{id}', [PegawaiController::class, 'destroy'])->name('destroyPegawai');
             // Sync Pegawai
-            Route::post('/synchronous-pegawai', [PegawaiController::class, 'syncPegawai'])->name('syncPegawai');
+            Route::get('/synchronous-pegawai', [PegawaiController::class, 'syncPegawai'])->name('syncPegawai');
         });
 
         // DATA USERS
@@ -107,7 +108,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             // Tambah Data Absensi
             Route::get('/Tambah-Data',[AbsensiController::class,'create'])->name('addAbsen');
             // Tambah Data Absensi 
-            Route::get('/Tambah-Data/Create-Data', [AbsensiController::class, 'store'])->name('storeAbsen');
+            Route::post('/Tambah-Data/Create-Data', [AbsensiController::class, 'store'])->name('storeAbsen');
             // Data Synchronous Data
             Route::post('/Data-Synchronous-Absensi', [AbsensiController::class, 'syncData'])->name('syncDataAbsensi');
             // Data Synchronous Data
@@ -135,7 +136,11 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             Route::post('/Data-Synchronous-Absensi2', [AbsensiMentahController::class, 'syncData2'])->name('syncDataAbsensi');            
             Route::post('Cari-Data', [AbsensiMentahController::class, 'index'])->name('searchAbsensilog');
         });
-
+        // ========== Gaji ========== //
+        Route::group(['prefix' => 'Gaji'], function(){
+            Route::get('/', [GajiController::class, 'index'])->name('gaji');            
+            Route::post('Cari-Data', [GajiController::class, 'index'])->name('searchGaji');
+        });
         // ========== Attendance ========== //
         Route::group(['prefix' => 'Attendance'], function(){
             Route::get('/', [attController::class, 'index'])->name('attendance');                    
