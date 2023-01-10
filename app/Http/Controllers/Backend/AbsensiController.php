@@ -89,7 +89,7 @@ class AbsensiController extends Controller
         $zk = new ZKLibrary($mesin->tcpip, $port);
         $zk->connect();
         $log_kehadiran = $zk->getAttendance();
-        return response()->json($log_kehadiran);
+        // return response()->json($log_kehadiran);
 
         // return response()->json($log_kehadiran);
         if(!empty($log_kehadiran) == true){
