@@ -88,7 +88,8 @@ class attRController extends Controller
         $zk         = new ZKLibrary($mesin->tcpip,$port);
         $zk->connect();
         $log        = $zk->getAttendance();
-        // return response()->json($dbName4);
+        // return response()->json($log);
+        // dd($log);
 
         if(!empty($log) == true){
             foreach($log as $data){

@@ -110,7 +110,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             // Tambah Data Absensi 
             Route::post('/Tambah-Data/Create-Data', [AbsensiController::class, 'store'])->name('storeAbsen');
             // Data Synchronous Data
-            Route::post('/Data-Synchronous-Absensi', [AbsensiController::class, 'syncData'])->name('syncDataAbsensi');
+            Route::get('/Data-Synchronous-Absensi', [AbsensiController::class, 'syncData'])->name('syncDataAbsensi');
             // Data Synchronous Data
             Route::post('/Data-Synchronous-Absensi2', [AbsensiController::class, 'syncData2'])->name('syncDataAbsensi');
             // Cetak Absensi TXT
