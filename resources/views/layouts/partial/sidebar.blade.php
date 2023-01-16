@@ -56,7 +56,7 @@
           </a>
       @endif
         </li>
-        <li class="nav-item">
+       <!-- <li class="nav-item">
           @if(Auth()->user()->role->id == 1 )
           {{-- <a href="{{route('absensi')}}" class="nav-link {{request()->is('Admin/Absensi') || request()->is('Admin/Absensi/*')  ? 'active' : ''}}"> --}}
             <a href="{{route('gaji')}}" class="nav-link {{request()->is('gaji') || request()->is('gaji/*')  ? 'active' : ''}}">
@@ -66,7 +66,7 @@
             </p>
           </a>
       @endif
-        </li>
+        </li> -->
         <li class="nav-item">
           @if(Auth()->user()->role->id == 2)
           {{-- <a href="{{route('absensi')}}" class="nav-link {{request()->is('Admin/Absensi') || request()->is('Admin/Absensi/*')  ? 'active' : ''}}"> --}}
