@@ -40,7 +40,7 @@
                             <i class="fas fa-question"></i>
                         </button>
                     </div>
-                    <form action="{{route('searchGaji')}}" method="POST" enctype="multipart/form-data" id="form-data">
+                    <form action="{{route('searchGaji')}}" method="GET" enctype="multipart/form-data" id="form-data">
                         @csrf
                         <div class="card-body">
                             <div class="row">
@@ -60,7 +60,7 @@
                                 </div>
                                 <p>
                                 <!-- Referensi Kerja -->
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     
                                     <span>Referensi Check In</span>
                                     <input type="time" id="refin" name="refin" class="form-control" min="9:00:00" max="15:00:00" step="60" value="{{$refin}}" required>
@@ -68,14 +68,14 @@
                                 <div class="col-md-4">
                                     <span>Referensi Check Out</span>                                    
                                     <input type="time" id="refout" name="refout" class="form-control" value="{{$refout}}" required>                                                                        
-                                </div>
+                                </div> --}}
                                 <p>
                                 <div class="col-md-4">
                                     <span>Divisi</span>                                    
                                     <select name="divisi" id="divisi" class="form-control @error('divisi') is-invalid @enderror">
-                                        <option value="" selected disabled>===== Pilih Divisi =====</option>
-                                        @foreach($divisi as $divisi)
-                                            <option value="{{$divisi->kode}}" @if(old('divisi') == $divisi->kode) selected @endif>{{$divisi->kode}} | {{$divisi->nama}}</option>
+                                        <option value="" selected disabled>===== Pilih SHIFT =====</option>
+                                        @foreach($referensi as $divisi)
+                                            <option value="{{$divisi->id}}" @if(old('divisi') == $divisi->id)  selected @endif>{{$divisi->id}} | {{$divisi->nama}}</option>
                                         @endforeach
                                     </select>                                                                  
                                 </div>
@@ -151,20 +151,22 @@
                     <thead>
                     <tr>
                         <th>No</th>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Check In</th>
-                        <th>Check Out</th>
-                        <th>Telat</th>
-                        <th>Jam Kerja</th>
-                        <th>Jumlah Hari</th>
-                        <th>Lembur Awal</th>
-                        <th>Lembur Akhir</th>
-                        <th>Jam Lembur</th>
-                        <th>Upah</th>
-                        <th>Total Upah</th>
-                        <th>Keterangan</th>
-                        <th>Tanggal</th>
+                            <th>NIP</th>
+                            <th>Nama</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Divisi</th>
+                            <th>Shift</th>
+                            <th>Tanggal</th>
+                            <th>Telat</th>
+                            <th>Jam Kerja</th>
+                            <th>Jumlah Hari</th>
+                            <th>Lembur Awal</th>
+                            <th>Lembur Akhir</th>
+                            <th>Total Lembur</th>
+                            <th>Upah</th>
+                            <th>Total Upah</th>
+                            
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -172,27 +174,42 @@
                         <?php 
                             $no = 1;
                         ?>
-                        @foreach($absensi as $data)
+                        @foreach($pay as $data)
                         <tr>
                             <td>{{$data->id}}</td>
                             <td>{{$data->pid}}</td>
                             <td>{{$data->nama}}</td>                            
                             <td>{{$data->check_in}}</td>
                             <td>{{$data->check_out}}</td>
+                            <td>{{$data->divisi_id}}</td>
+                            <td>{{$data->ref}}</td>
+                            <td>{{$data->date}}</td>                           
                             <td>{{$data->telat}}</td>
                             <td>{{$data->jam_kerja}}</td>
-                            <td>{{$data->jumlah_hari}}</td>
-                            <td>{{$data->lembur_awal}}</td>
-                            <td>{{$data->lembur_akhir}}</td>
-                            <td>{{$data->jam_lembur}}</td>
-                            <td>{{$data->upah}}</td>
-                            <td>{{$data->total_upah}}</td>                            
-                            <td>{{$data->Keterangan}}</td>  
-                            <td>{{$data->tanggal}}</td> 
-                            <td>
-                               @if(Auth()->user()->role->id == 1 )
+                            <td>{{$data->jum_hari}}</td>
+                            <td>{{$data->lembur_aw}}</td>
+                            <td>{{$data->lembur_ak}}</td>
+                            <td>{{$data->tot_lembur}}
+                                <div id="editStatus{{$data->id}}" style="display:none">
+                                    <form action="{{route('uptG',$data->id)}}" method="POST" enctype="multipart/form-data" id="form-data"style="display: flex">
+                                        @csrf                                        
+                                        <input type="text" name="lm" class="form-control @error('lm') is-invalid @enderror" id="lm" placeholder="Ketik Jumlah Lembur"  >
+                                        <div style="margin-top: 5px; margin-left: 10px">
+                                            <button type="submit" class="btn btn-primary">Done</button>
+                                            <a href="" class="btn btn-sm" onclick = "$('#editStatus{{$data->id}}').hide(); $('#status{{$data->id}}').show(); return false; ">&times;</a>
+                                        </div>
+                                    </form>
+                                </div>
+                            </td>
+                            <td>{{$data->upah}}</td>                         
+                            <td>{{$data->total_upah}}</td>                              
+                            <td style="display: flex; justify-content: space-between">
+                               @if(Auth()->user()->role->id == 1 )                               
+                                <a type="button" class="btn btn-warning" href=""
+                                onclick="$('#editStatus{{$data->id}}').show(); $('#status{{$data->id}}').hide(); return false; ">
+                                <i class="ti-marker-alt">Ubah</i></a>
                                 {{-- <a href="{{ route('editAbsensi',['id' => $data->id, 'pid' => $data->pid, 'date' => date('Y-m-d', strtotime($data->sync_date))]) }}"  class="btn btn-sm btn-warning">Ubah</a> --}}
-                                <button class="btn btn-sm btn-danger" id="btn-delete" onclick="destroy('{{$data->id}}')">Hapus</button>
+                                {{-- <button class="btn btn-sm btn-danger" id="btn-delete" onclick="destroy('{{$data->id}}')">Hapus</button> --}}
                                 @endif
                             </td>
                         </tr>
@@ -200,21 +217,22 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                        <th>No</th>
-                        <th>NIP</th>
-                        <th>Nama</th>
-                        <th>Check In</th>
-                        <th>Check Out</th>
-                        <th>Telat</th>
-                        <th>Jam Kerja</th>
-                        <th>Jumlah Hari</th>
-                        <th>Lembur Awal</th>
-                        <th>Lembur Akhir</th>
-                        <th>Jam Lembur</th>
-                        <th>Upah</th>
-                        <th>Total Upah</th>
-                        <th>Keterangan</th>
-                        <th>Tanggal</th>
+                            <th>No</th>
+                            <th>NIP</th>
+                            <th>Nama</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Divisi</th>
+                            <th>Shift</th>
+                            <th>Tanggal</th>
+                            <th>Telat</th>
+                            <th>Jam Kerja</th>
+                            <th>Jumlah Hari</th>
+                            <th>Lembur Awal</th>
+                            <th>Lembur Akhir</th>
+                            <th>Total Lembur</th>
+                            <th>Upah</th>
+                            <th>Total Upah</th>                   
                         <th>Action</th>
                         </tr>
                     </tfoot>
@@ -416,3 +434,4 @@
 </script>
 
 @stop
+

@@ -92,17 +92,19 @@ class PegawaiController extends Controller
         
         Session::put('sweetalert', 'success');
         return redirect()->route('pegawai')->with('alert', 'Sukses Menambahkan Data');
-    }
+     }
 
     function edit($id){
         $pegawai = Pegawai::where('id', $id)->first();
         
         // $pegawai = Pegawai::find($id);
+        $ref    = ReferensiKerja::all();
+        // return response()->json($ref);
         $jabatan = Jabatan::all();
         $divisi = Divisi::all();
         $departement = Departement::all();
         $reguKerja = ReguKerja::all();
-        return view('admin.pegawai.edit', compact(['pegawai', 'id', 'jabatan', 'divisi', 'departement', 'reguKerja']));
+        return view('admin.pegawai.edit', compact(['pegawai', 'id', 'jabatan', 'divisi', 'departement', 'reguKerja','ref']));
     // dd($id);
     }
 
@@ -178,10 +180,11 @@ class PegawaiController extends Controller
                 'sap'   => $request->nsap
             ]);
         }
-
+        // return response()->json($request->divisi);
         Pegawai::where('id', $id)->update([
             'jabatan_id'        => $request->jabatan_id,
             'departement_id'    => $request->departement,
+            'ref_id'         => $request->ref_id,
             'divisi_id'         => $request->divisi,
             'regukerja_id'      => $request->regukerja_id,
             'pid'               => $request->pid,

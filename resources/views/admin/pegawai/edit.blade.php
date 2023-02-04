@@ -133,6 +133,21 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="ref_id">Referensi Kerja</label>
+                        <select name="ref_id" id="ref_id" class="form-control @error('ref_id') is-invalid @enderror">
+                            <option value="" selected disabled>===== Pilih Referensi Kerja =====</option>
+                            @foreach($ref as $ref)
+                                <option value="{{$ref->id}}" @if($pegawai->ref_id == $ref->id) selected @endif>{{$ref->id}} | {{$ref->nama}}</option>
+                            @endforeach
+                        </select>
+
+                        @error('ref_id')
+                            <div class="invalid-feedback">
+                                {{$message}}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label for="email">Email</label>
                         <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" id="email" placeholder="Enter email"  value="{{ $pegawai->email }}">
 

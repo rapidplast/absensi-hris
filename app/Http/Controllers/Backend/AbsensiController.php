@@ -14,6 +14,7 @@ use App\Models\Pegawai;
 use App\Models\ReferensiKerja;
 use App\Models\ReguKerja;
 use App\Models\ShiftKerja;
+use App\Models\Gaji;
 use Carbon\Carbon;
 use Auth;
 // use Dotenv\Validator;
@@ -479,8 +480,9 @@ class AbsensiController extends Controller
         $pegawai=Pegawai::all();
         return view('admin.absensi.create',compact(['pegawai']));
     }
-    function store(Request $request){
-
+    function store(Request $request){                
+        $date1 = date('m',strtotime($request->sync_date));
+        // return response()->json($date1);
         $year = Carbon::now()->format('Y');
         $month = Carbon::now()->format('m');
 
@@ -498,7 +500,7 @@ class AbsensiController extends Controller
         $dbName3 = $year.''.$month3.'HISTORY';
         $dbName2 = $year.''.$month2.'HISTORY';
         $dbName1 = $year.''.$month1.'HISTORY';
-
+        
         
         $dbCheck4 = Schema::connection('mysql2')->hasTable($dbName4);
         $dbCheck3 = Schema::connection('mysql2')->hasTable($dbName3);
@@ -527,6 +529,8 @@ class AbsensiController extends Controller
                 'check_in.required'         =>  'Check In Harus Diisi!',
                 'check_out.required'          =>  'Check Out Diisi!'
             ]);
+            // return response()->json( $month);
+            if($date1 == $month){
         $absen = DB::connection('mysql2')->table($dbName)->insert([
             'pid'       => $request->pid,
             'sap'       => $request->sap,
@@ -546,8 +550,103 @@ class AbsensiController extends Controller
             'updated_at'    => Carbon::now()
             
         ]);          
+        // return response()->json($absen);
         Session::put('sweetalert', 'success');
         return redirect()->route('addAbsen')->with('alert', 'Sukses Menambahkan Data');
+    }elseif($date1 == $month4){
+        $absen = DB::connection('mysql2')->table($dbName4)->insert([
+            'pid'       => $request->pid,
+            'sap'       => $request->sap,
+            'check_in'  =>  $request->check_in,
+            'check_out' => $request->check_out,
+            'telat'     =>  $request->telat,
+            'check_in1'  => $request->check_in1,
+            'check_out1' => $request->check_out1,
+            'check_in2'  => $request->check_in2,
+            'check_out2' => $request->check_out2,
+            'check_in3'  => $request->check_in3,
+            'check_out3' => $request->check_out3,
+            'absen1'    => $request->absen1,
+            'absen2'    => $request->absen2,
+            'izin'      => $request->izin,
+            'sync_date'    => $request->sync_date,
+            'updated_at'    => Carbon::now()
+            
+        ]);          
+        // return response()->json($absen);
+        Session::put('sweetalert', 'success');
+        return redirect()->route('addAbsen')->with('alert', 'Sukses Menambahkan Data');
+    }elseif($date1 == $month3){
+        $absen = DB::connection('mysql2')->table($dbName3)->insert([
+            'pid'       => $request->pid,
+            'sap'       => $request->sap,
+            'check_in'  =>  $request->check_in,
+            'check_out' => $request->check_out,
+            'telat'     =>  $request->telat,
+            'check_in1'  => $request->check_in1,
+            'check_out1' => $request->check_out1,
+            'check_in2'  => $request->check_in2,
+            'check_out2' => $request->check_out2,
+            'check_in3'  => $request->check_in3,
+            'check_out3' => $request->check_out3,
+            'absen1'    => $request->absen1,
+            'absen2'    => $request->absen2,
+            'izin'      => $request->izin,
+            'sync_date'    => $request->sync_date,
+            'updated_at'    => Carbon::now()
+            
+        ]);          
+        // return response()->json($absen);
+        Session::put('sweetalert', 'success');
+        return redirect()->route('addAbsen')->with('alert', 'Sukses Menambahkan Data');
+    }elseif($date1 == $month2){
+        $absen = DB::connection('mysql2')->table($dbName2)->insert([
+            'pid'       => $request->pid,
+            'sap'       => $request->sap,
+            'check_in'  =>  $request->check_in,
+            'check_out' => $request->check_out,
+            'telat'     =>  $request->telat,
+            'check_in1'  => $request->check_in1,
+            'check_out1' => $request->check_out1,
+            'check_in2'  => $request->check_in2,
+            'check_out2' => $request->check_out2,
+            'check_in3'  => $request->check_in3,
+            'check_out3' => $request->check_out3,
+            'absen1'    => $request->absen1,
+            'absen2'    => $request->absen2,
+            'izin'      => $request->izin,
+            'sync_date'    => $request->sync_date,
+            'updated_at'    => Carbon::now()
+            
+        ]);          
+        // return response()->json($absen);
+        Session::put('sweetalert', 'success');
+        return redirect()->route('addAbsen')->with('alert', 'Sukses Menambahkan Data');
+    }elseif($date1 == $month1){
+        $absen = DB::connection('mysql2')->table($dbName1)->insert([
+            'pid'       => $request->pid,
+            'sap'       => $request->sap,
+            'check_in'  =>  $request->check_in,
+            'check_out' => $request->check_out,
+            'telat'     =>  $request->telat,
+            'check_in1'  => $request->check_in1,
+            'check_out1' => $request->check_out1,
+            'check_in2'  => $request->check_in2,
+            'check_out2' => $request->check_out2,
+            'check_in3'  => $request->check_in3,
+            'check_out3' => $request->check_out3,
+            'absen1'    => $request->absen1,
+            'absen2'    => $request->absen2,
+            'izin'      => $request->izin,
+            'sync_date'    => $request->sync_date,
+            'updated_at'    => Carbon::now()
+            
+        ]);          
+        // return response()->json($absen);
+        Session::put('sweetalert', 'success');
+        return redirect()->route('addAbsen')->with('alert', 'Sukses Menambahkan Data');
+    }
+    
     }
 
 
@@ -634,35 +733,40 @@ class AbsensiController extends Controller
                 }
                 foreach($absen as $a){      
         
-                        $pegawai = Pegawai::where('pid', $absen->pid)->first();
-                        $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
-                        $awal   = date_create($reguKerja->tgl_start);
-                        $akhir  = date_create(date('Y-m-d', strtotime(Carbon::now())));        
-                        $diff   = date_diff($awal,$akhir);
-                        $modulus = $diff->d % $reguKerja->hari;
-                        if ($modulus == 0){
-                            $modulus = $reguKerja->hari;
-                        }
+                //         $pegawai = Pegawai::where('pid', $absen->pid)->first();
+                //         // return response()->json($pegawai);
+                //         $reguKerja = ReguKerja::where('kode', $pegawai->regukerja_id)->first();
+                //         // return response()->json($reguKerja);
+                //         $awal   = date_create($reguKerja->tgl_start);
+                //         $akhir  = date_create(date('Y-m-d', strtotime(Carbon::now())));        
+                //         $diff   = date_diff($awal,$akhir);
+                //         $modulus = $diff->d % $reguKerja->hari;
+                //         if ($modulus == 0){
+                //             $modulus = $reguKerja->hari;
+                //         }
         
-                    $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
-                    $jam    = ReferensiKerja::where('kode',$jadwal[$modulus]) ->first();
-                    $check_in   = $absen->check_in;
-                    if ($check_in >= $jam->workin){
-                            $telat      = strtotime($check_in) - strtotime($jam->workin) ;
-                            $late       = date('H:i:s', $telat);
-                            // return response()->json($late);
-                        // Useless
-                // $awal = strtotime($reguKerja->tgl_start);
-                // $akhir = strtotime(Carbon::now());
-                // $diff = $akhir - $awal ;
-                // $hasil = Round($diff / 60/ 60 /24);
-                // $modulus = $hasil % 7;        
+                //     $jadwal = Jadwal::where('id', $reguKerja->jadwal_id)->first();
+                //     // return response()->json($jadwal);
+                //     $jam    = ReferensiKerja::where('kode',$jadwal[$modulus]) ->first();
+                //     // return response()->json($jam);
+                //     $check_in   = $absen->check_in;
+                //     if ($check_in >= $jam->workin){
+                //             $telat      = strtotime($check_in) - strtotime($jam->workin) ;
+                //             $late       = date('H:i:s', $telat);
+                //             // return response()->json($late);
+                //         // Useless
+                // // $awal = strtotime($reguKerja->tgl_start);
+                // // $akhir = strtotime(Carbon::now());
+                // // $diff = $akhir - $awal ;
+                // // $hasil = Round($diff / 60/ 60 /24);
+                // // $modulus = $hasil % 7;        
         
-                    } else {                
-                        $telat       = strtotime('00:00:00');
-                        $late        = date('H:i:s', $telat);
-                        // return response()->json($late);
-                    }            
+                //     } else {                
+                //         $telat       = strtotime('00:00:00');
+                         $late       = strtotime('00:00:00');
+                //         $late        = date('H:i:s', $telat);
+                //         // return response()->json($late);
+                //     }            
                 }    
                 // return response()->json($late);
 
@@ -992,7 +1096,7 @@ class AbsensiController extends Controller
     function update(Request $request, $id){
         $date  = $request->sync_date;         
         // $tangga = (object)($request->sync_date);
-        // return response()->json($date);
+        // return response()->json($id);
         $year   = Carbon::now()->format('Y');
         $month  = Carbon::now()->format('m');
         $dbName = $year.''.$month.'HISTORY';
@@ -1055,23 +1159,24 @@ class AbsensiController extends Controller
         // $data = $request->all();
         //             $a = $data['sync_date'];
             // return response()->json($request['sync_date']);
-        if(!empty($Absensi)){            
+        if(!empty($Absensi)){ 
+            // return response()->json($Absensi);    
             $absenmentah = AbsenMentah::where([            
                 ['pid', $Absensi->pid],
                 [DB::raw('DATE(date)') , date('Y-m-d', strtotime($Absensi->sync_date))]
-                ])->first();
-                
+                ])->first();                  
                 // return response()->json($request->sync_date1);
                 // return response()->json($request->all());
                 // return response()->json($request['sync_date']);
                 // dd($request->sync_date);
 
                 $jam        = (date('H:i:s', strtotime($request->check_in)));
+                //  return response()->json($jam);
                 $tanggal    = (date('Y-m-d' , strtotime($request->sync_date)));                
                 // return response()->json($tanggal);
                 $input      = $tanggal.' '.$jam;
                 $datetime   = date('Y-m-d H:i:s', strtotime($input));
-                // return response()->json($jam);
+                // return response()->json($datetime);
                 $absen=Absenmentah::where([
                     ['pid', $Absensi->pid],
                     [DB::raw('DATE(date)'),date('Y-m-d' , strtotime($Absensi->sync_date))]
@@ -1097,6 +1202,7 @@ class AbsensiController extends Controller
                     'sync_date'    => $tanggal,
                     'updated_at'    => Carbon::now()
                 ]);
+                // $gaji = Gaji::where();
                 // return response()->json($tanggal);
         }elseif(!empty($Absensi4)){
             $absenmentah = AbsenMentah::where([            
@@ -1400,3 +1506,4 @@ class AbsensiController extends Controller
         }
     }
 }
+

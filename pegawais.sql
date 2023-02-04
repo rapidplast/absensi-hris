@@ -27,6 +27,28 @@ SET time_zone = "+00:00";
 -- Table structure for table `pegawais`
 --
 
+CREATE TABLE `gaji` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `pid` bigint(20) UNSIGNED DEFAULT NULL,
+  `nama` VARCHAR(100) ,
+  `check_in` time DEFAULT NULL,
+	`check_out` time DEFAULT NULL,
+  `divisi_id` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+	`date` date,
+	`telat` time DEFAULT NULL,
+	`jam_kerja` BIGINT(20) DEFAULT NULL,
+	`jum_hari` BIGINT(20) DEFAULT NULL,
+	`lembur_aw` BIGINT(20) DEFAULT NULL,
+	`lembur_ak` BIGINT(20) DEFAULT NULL,
+	`tot_lembur` BIGINT(20) DEFAULT NULL,
+	`upah` BIGINT(20) DEFAULT NULL,
+	`total_upah` BIGINT(20) DEFAULT NULL,
+	`ket` BIGINT(20) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+INSERT INTO `gaji` (`id`, `pid`, `check_in`, `check_out`, `divisi_id`, `date`, `telat`, `jam_kerja`, `jum_hari`, `lembur_aw`, `lembur_ak`, `tot_lembur`, `upah`, `total_upah`, `ket`, `created_at`, `updated_at`) VALUES ('1', '20973', '07:45:23', '15:15:36', '1', '2022-11-23', '01:45:23', '7', '1', '0', '1', '1', '87500', '100000', '0', '2023-01-31 09:57:34', '2023-01-31 09:57:34');
 CREATE TABLE `pegawais` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -767,6 +789,10 @@ ALTER TABLE `pegawais`
 COMMIT;
 
 --
+ALTER TABLE pegawais
+ADD column ref_id int(100) after departement;
+ALTER TABLE pegawais
+ADD FOREIGN KEY (ref_id) REFERENCES referensikerjas(id) ON DELETE CASCADE ON UPDATE CASCADE;
 -- Constraints for table `pegawais`
 --
 ALTER TABLE `gaji`

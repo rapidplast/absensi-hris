@@ -138,8 +138,10 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
         });
         // ========== Gaji ========== //
         Route::group(['prefix' => 'Gaji'], function(){
-            Route::get('/', [GajiController::class, 'index'])->name('gaji');            
-            Route::post('Cari-Data', [GajiController::class, 'index'])->name('searchGaji');
+            Route::get('/', [GajiController::class, 'index'])->name('gaji');                              
+            // Route::post('Cari-Data', [GajiController::class, 'index'])->name('searchGaji');
+            Route::get('Cari-Data', [GajiController::class, 'index'])->name('searchGaji');
+            Route::post('/Update/{id}', [GajiController::class, 'update'])->name('uptG');
         });
         // ========== Attendance ========== //
         Route::group(['prefix' => 'Attendance'], function(){
