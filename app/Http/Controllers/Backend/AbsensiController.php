@@ -1459,17 +1459,51 @@ class AbsensiController extends Controller
     }
 
     function destroy($id){
+
         $year       = Carbon::now()->format('Y');
         $month      = Carbon::now()->format('m');
         $dbName     = $year.''.$month.'HISTORY';
+        
+        $month4 = strtotime($month) + strtotime("-1 month");
+        $month4 = date('m', $month4);
+        $month3 = strtotime($month) + strtotime("-2 month");
+        $month3 = date('m', $month3);
+        $month2 = strtotime($month) + strtotime("-3 month");
+        $month2 = date('m', $month2);
+        $month1 = strtotime($month) + strtotime("-4 month");
+        $month1 = date('m', $month1);
+        $dbName = $year.''.$month.'HISTORY';
+        $dbName4 = $year.''.$month4.'HISTORY';
+        $dbName3 = $year.''.$month3.'HISTORY';
+        $dbName2 = $year.''.$month2.'HISTORY';
+        $dbName1 = $year.''.$month1.'HISTORY';
+       
+        $dbCheck4 = Schema::connection('mysql2')->hasTable($dbName4);
+        $dbCheck3 = Schema::connection('mysql2')->hasTable($dbName3);
+        $dbCheck2 = Schema::connection('mysql2')->hasTable($dbName2);
+        $dbCheck1 = Schema::connection('mysql2')->hasTable($dbName1);
+
 
         $absen      = DB::connection('mysql2')->table($dbName)
         ->where('id',$id)->first();
-
+        $absen4      = DB::connection('mysql2')->table($dbName4)
+        ->where('id',$id)->first();
+        $absen3      = DB::connection('mysql2')->table($dbName2)
+        ->where('id',$id)->first();
+        $absen2      = DB::connection('mysql2')->table($dbName2)
+        ->where('id',$id)->first();
+        // return response()->json($absen);
         if(!empty($absen)){
             DB::connection('mysql2')->table($dbName)->where('id',$id)->delete();
-        }
+        }elseif(!empty($absen4)){
+            DB::connection('mysql2')->table($dbName4)->where('id',$id)->delete();
+        }elseif(!empty($absen3)){
+            DB::connection('mysql2')->table($dbName3)->where('id',$id)->delete();
+        }elseif(!empty($absen2)){
+            DB::connection('mysql2')->table($dbName2)->where('id',$id)->delete();
         // return response()->json(!empty($absen));
+    }else{
+        DB::connection('mysql2')->table($dbName1)->where('id',$id)->delete();
     }
 
     function syncData2(Request $request){
@@ -1506,4 +1540,4 @@ class AbsensiController extends Controller
         }
     }
 }
-
+}

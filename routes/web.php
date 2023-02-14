@@ -85,7 +85,7 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             // Delete Data
             Route::delete('/Delete/{id}', [PegawaiController::class, 'destroy'])->name('destroyPegawai');
             // Sync Pegawai
-            Route::get('/synchronous-pegawai', [PegawaiController::class, 'syncPegawai'])->name('syncPegawai');
+            Route::post('/synchronous-pegawai', [PegawaiController::class, 'syncPegawai'])->name('syncPegawai');
         });
 
         // DATA USERS
@@ -143,6 +143,13 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             Route::get('Cari-Data', [GajiController::class, 'index'])->name('searchGaji');
             Route::post('/Update/{id}', [GajiController::class, 'update'])->name('uptG');
         });
+                // ========== Gaji ========== //
+                Route::group(['prefix' => 'Payroll'], function(){
+                    Route::get('/', [GajiController::class, 'index'])->name('pay');                              
+                    // Route::post('Cari-Data', [GajiController::class, 'index'])->name('searchGaji');
+                    Route::get('Cari-Data', [GajiController::class, 'index'])->name('searchPay');
+                    // Route::post('/Update/{id}', [GajiController::class, 'update'])->name('uptG');
+                });
         // ========== Attendance ========== //
         Route::group(['prefix' => 'Attendance'], function(){
             Route::get('/', [attController::class, 'index'])->name('attendance');                    

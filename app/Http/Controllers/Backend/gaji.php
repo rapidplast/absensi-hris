@@ -155,34 +155,56 @@ class GajiController extends Controller
                 afh.check_in,
                 afh.check_out,
                 a.nama AS divisi,
-                DATE( afh.sync_date ) AS tanggal,
+                DATE(afh.sync_date) as tanggal,
             IF
                 (
-                    SUBTIME( afh.check_in, '$refer->workin' ) < ' 00:00:00', '00:00:00', SUBTIME( afh.check_in, '$refer->workin' )) AS telat, IF ( afh.check_in > '$refer->workin',
-                    DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' ),
+                    SUBTIME( afh.check_in, '$refer->workin' ) < ' 00:00:00',
+                    '00:00:00',
+                SUBTIME( afh.check_in, '$refer->workin' )) AS telat,
+                IF (
+	                    afh.check_in > '$refer->workin',
+	            DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' ),
                 IF
-                ( DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' )>= 8, 8, NULL )) AS jam_kerja,
+	                ( DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' )>= 8, 8, NULL )) AS jam_kerja,
             IF
                 (
                     afh.check_out < '$refer->workout',
                     DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workin' ), '%k' ),
                 DATE_FORMAT(( SUBTIME( afh.check_out, afh.check_in )), '%k' )) AS jam_kerja_full,
-                IF
+            IF
                 (
                 IF
                     (
                         afh.check_out < '$refer->workout',
-                        DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workin' ), '%H' ),
-                    DATE_FORMAT(( SUBTIME( afh.check_out, afh.check_in )), '%H' )) > 0,
+                        DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workin' ), '%k' ),
+                    DATE_FORMAT(( SUBTIME( afh.check_out, afh.check_in )), '%k' )) >= 8,
                     1,
                     '' 
                 ) AS jumlah_hari,
-            (IF
+            IF
                 (
-                    afh.check_in > '$refer->workin',
-                    DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' ),
                 IF
-                ( DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' )>= 8, 8, NULL ))*12500) AS upah,
+                    (
+                        afh.check_out < '$refer->workout',
+                        DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workin' ), '%k' ),
+                    DATE_FORMAT(( SUBTIME( afh.check_out, afh.check_in )), '%k' )) >= 8,
+                    100000 *
+                IF
+                    (
+                    IF
+                        (
+                            afh.check_out < '$refer->workout',
+                            DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workin' ), '%k' ),
+                        DATE_FORMAT(( SUBTIME( afh.check_out, afh.check_in )), '%k' )) > 0,
+                        1,
+                        0 
+                    ),
+                    100000 / 8 *
+                IF
+                    (
+                        afh.check_out < '$refer->workout',
+                        DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workin' ), '%k' ),
+                    DATE_FORMAT(( SUBTIME( afh.check_out, afh.check_in )), '%k' ))) AS upah,
             IF
                 (
                     DATE_FORMAT( SUBTIME( '$refer->workin', afh.check_in ), '%k' ) <= 0,
@@ -241,8 +263,8 @@ class GajiController extends Controller
             a.id,
             a.pid,
             b.nama,
-            a.check_in,
-            a.check_out,
+            e.check_in,
+            e.check_out,
             a.divisi_id,
             c.nama as ref,
             a.date,
@@ -262,139 +284,106 @@ class GajiController extends Controller
             absensi_fingerprint.divisies d,
 						absensi_frhistory.202302HISTORY e 
         WHERE
-			a.pid = e.pid AND 
-            a.pid = b.pid AND
-            a.date = DATE(e.sync_date)
+			a.pid = e.pid and 
+            a.pid = b.pid 
             AND a.ref_id = c.id 
             AND a.ref_id = $request->divisi
             AND d.kode = a.divisi_id 
             AND a.divisi_id = 'BRG'  
             AND a.date BETWEEN '$tanggal' 
             AND '$tanggal2'
-            GROUP BY a.id
+            GROUP BY a.check_in,a.check_out
             ");
             
             // return response()->json($pay);
             foreach($absensi as $data){
-                // return response()->json($absensi); 
+                // return response()->json($data); 
                 // $g = DB::select(" select * from gaji where pid = '20973' and date BETWEEN '2022-11-23' and '2022-11-23'");
                 // $gaji = DB::connection('mysql')->table('gaji')->where([['pid',$data->pid]])->wherebetween('date',[$tanggal,$tanggal2])->first();
-                $check1 = COUNT((object)Gaji::wherebetween('date',[$tanggal,$tanggal2])->get());  
-                $check = (object)Gaji::wherebetween('date',[$tanggal,$tanggal2])->get();  
-                // return response()->json($check1);
-                if(empty($check1)){
-                    $gaji = DB::connection('mysql')->table('gaji')->insert([
-                        'pid' =>$data->pid , 
-                        'check_in' =>$data->check_in , 
-                        'check_out' =>$data->check_out , 
-                        'divisi_id' => 'BRG', 
-                        'ref_id' => $request->divisi, 
-                        'date' =>$data->tanggal , 
-                        'telat' =>$data->telat , 
-                        'jam_kerja' =>$data->jam_kerja , 
-                        'jam_kerja_full' =>$data->jam_kerja_full ,
-                        'jum_hari' =>$data->jumlah_hari , 
-                        'lembur_aw' =>$data->lembur_awal , 
-                        'lembur_ak' =>$data->lembur_akhir , 
-                        'tot_lembur' => 0 , 
-                        'upah' =>$data->upah , 
-                        'total_upah' =>$data->upah, 
-                        'ket' =>$data->Keterangan,  
-                        'created_at' =>Carbon::now() , 
-                        'updated_at' =>Carbon::now()
-                    ]);                    
-                }else{
-                // return response()->json($check); 
+                $check = (object)Gaji::where([['pid',511]])->wherebetween('date',['2023-02-03','2023-02-09'])->get();  
+                return response()->json($check);
+                $gaji = (object)Gaji::where([['pid',$data->pid]])->wherebetween('date',[$tanggal,$tanggal2])->first();  
+                // $gaji = (object)Gaji::where([['pid',$data->pid],['date',$data->pid]])->first();
+                // return response()->json($gaji->tanggal);
+                // $absen = $absensi->where('id',$data->id)->first();             
+                // return response()->json($gaji->pid = $data->pid && isset($data->tanggal) == isset($gaji->date));
                 
-                    $gaji = Gaji::where([['pid',$data->pid],['date',$data->tanggal]])->first();    
-                                    // return response()->json($gaji); 
-                                    // pid salah karena = bukan ==
-                    // return response()->json($gaji->pid == $data->pid && isset($data->tanggal) == isset($gaji->date));
-                    if(isset($data->pid) == isset($gaji->pid)  && isset($data->tanggal) == isset($gaji->date)){
-                        // return    response()->json($gaji);
-                        // $gaji->check_out == null || $gaji->check_in == null
-                    }else{
-                        $gaji = DB::connection('mysql')->table('gaji')->insert([
-                            'pid' =>$data->pid, 
-                            'check_in' =>$data->check_in, 
-                            'check_out' =>$data->check_out , 
-                            'divisi_id' => 'BRG', 
-                            'ref_id' => $request->divisi, 
-                            'date' =>$data->tanggal , 
-                            'telat' =>$data->telat , 
-                            'jam_kerja' =>$data->jam_kerja , 
-                            'jam_kerja_full' =>$data->jam_kerja_full ,
-                            'jum_hari' =>$data->jumlah_hari , 
-                            'lembur_aw' =>$data->lembur_awal , 
-                            'lembur_ak' =>$data->lembur_akhir , 
-                            'tot_lembur' => 0 , 
-                            'upah' =>$data->upah , 
-                            'total_upah' =>$data->upah, 
-                            'ket' =>$data->Keterangan,  
-                            'created_at' =>Carbon::now() , 
-                            'updated_at' =>Carbon::now()
-        
-                     ]);
-                    }
-                    if(!empty($gaji)){
-                        // $gaji = (object)Gaji::where([['pid',$data->pid]])->wherebetween('date',[$tanggal,$tanggal2])->first();
-                        $gaji = (object)Gaji::where([['pid',$data->pid],['date',$data->tanggal]])->first();
-                        // $gaj = Gaji::where([['pid',$data->pid],['date',$data->tanggal]])->first();
-                        // return response()->json($gaji);
-                    if(empty($gaji->check_in) || empty($gaji->check_out) ||$gaji->check_in == null || $gaji->check_out == null){
-                        $gaji = Gaji::where([['pid',$data->pid],['date',$data->tanggal]])->update([
-                            'pid' =>$data->pid , 
-                            'check_in' =>$data->check_in , 
-                            'check_out' =>$data->check_out , 
-                            'divisi_id' => 'BRG', 
-                            'ref_id' => $request->divisi, 
-                            'date' =>$data->tanggal , 
-                            'telat' =>$data->telat , 
-                            'jam_kerja' =>$data->jam_kerja , 
-                            'jam_kerja_full' =>$data->jam_kerja_full ,
-                            'jum_hari' =>$data->jumlah_hari , 
-                            'lembur_aw' =>$data->lembur_awal , 
-                            'lembur_ak' =>$data->lembur_akhir , 
-                            
-                            'tot_lembur' =>0 , 
-                            'upah' =>$data->upah , 
-                            'total_upah' =>$data->upah, 
-                            'ket' =>$data->Keterangan,
-                            'created_at' =>Carbon::now() , 
-                            'updated_at' =>Carbon::now()
-                            
-                     ]);
-                    //  return response()->json(empty($gaji));
-                    // }else{
-                        // return response()->json($request->lm);
-                    //     $gaji = DB::connection('mysql')->table('gaji')->where('pid',$data->pid)->update([
-                    //         'pid' =>$data->pid , 
-                    //         'check_in' =>$data->check_in , 
-                    //         'check_out' =>$data->check_out , 
-                    //         'divisi_id' => 'BRG', 
-                    //         'ref_id' => $request->divisi, 
-                    //         'date' =>$data->tanggal , 
-                    //         'telat' =>$data->telat , 
-                    //         'jam_kerja' =>$data->jam_kerja , 
-                    //         'jum_hari' =>$data->jumlah_hari , 
-                    //         'lembur_aw' =>$data->lembur_awal , 
-                    //         'lembur_ak' =>$data->lembur_akhir , 
-                    //         'tot_lembur' =>$data->total_lembur , 
-                    //         'upah' =>$data->upah , 
-                    //         'total_upah' =>$data->upah, 
-                    //         'ket' =>$data->Keterangan , 
-                    //         'created_at' =>Carbon::now() , 
-                    //         'updated_at' =>Carbon::now() 
-        
-                    //  ]);
-                    }
-                }
-                }
-                
-            
-        
-            // return response()->json($absensi);
+            if($gaji->pid = $data->pid && isset($data->tanggal) == isset($gaji->date)){
+                // return response()->json($gaji->checkout);
+                // $gaji->check_out == null || $gaji->check_in == null
+            }else{
+                $gaji = DB::connection('mysql')->table('gaji')->insert([
+                    'pid' =>$data->pid , 
+                    'check_in' =>$data->check_in , 
+                    'check_out' =>$data->check_out , 
+                    'divisi_id' => 'BRG', 
+                    'ref_id' => $request->divisi, 
+                    'date' =>$data->tanggal , 
+                    'telat' =>$data->telat , 
+                    'jam_kerja' =>$data->jam_kerja , 
+                    'jam_kerja_full' =>$data->jam_kerja_full ,
+                    'jum_hari' =>$data->jumlah_hari , 
+                    'lembur_aw' =>$data->lembur_awal , 
+                    'lembur_ak' =>$data->lembur_akhir , 
+                    'tot_lembur' => 0 , 
+                    'upah' =>$data->upah , 
+                    'total_upah' =>$data->upah, 
+                    'ket' =>$data->Keterangan,  
+                    'created_at' =>Carbon::now() , 
+                    'updated_at' =>Carbon::now()
 
+             ]);
+            }
+            // return response()->json($absensi);
+            if(!empty($gaji)){
+                $gaji = (object)Gaji::where([['pid',$data->pid]])->wherebetween('date',[$tanggal,$tanggal2])->first();
+                // return response()->json($gaji);
+            if(empty($gaji->check_in) || empty($gaji->check_out)  || $gaji->check_in == 0 || $gaji->check_out == 0 ||$gaji->check_in == null || $gaji->check_out == null || $gaji->check_in == '00:00:00' || $gaji->check_out == '00:00:00' ){
+                $gaji = DB::connection('mysql')->table('gaji')->where('pid',$data->pid)->update([
+                    'pid' =>$data->pid , 
+                    'check_in' =>$data->check_in , 
+                    'check_out' =>$data->check_out , 
+                    'divisi_id' => 'BRG', 
+                    'ref_id' => $request->divisi, 
+                    'date' =>$data->tanggal , 
+                    'telat' =>$data->telat , 
+                    'jam_kerja' =>$data->jam_kerja , 
+                    'jam_kerja_full' =>$data->jam_kerja_full ,
+                    'jum_hari' =>$data->jumlah_hari , 
+                    'lembur_aw' =>$data->lembur_awal , 
+                    'lembur_ak' =>$data->lembur_akhir , 
+                    'tot_lembur' =>0 , 
+                    'upah' =>$data->upah , 
+                    'total_upah' =>$data->upah, 
+                    'ket' =>$data->Keterangan,
+                    'created_at' =>Carbon::now() , 
+                    'updated_at' =>Carbon::now()
+
+             ]);
+            }else{
+                // return response()->json($request->lm);
+            //     $gaji = DB::connection('mysql')->table('gaji')->where('pid',$data->pid)->update([
+            //         'pid' =>$data->pid , 
+            //         'check_in' =>$data->check_in , 
+            //         'check_out' =>$data->check_out , 
+            //         'divisi_id' => 'BRG', 
+            //         'ref_id' => $request->divisi, 
+            //         'date' =>$data->tanggal , 
+            //         'telat' =>$data->telat , 
+            //         'jam_kerja' =>$data->jam_kerja , 
+            //         'jum_hari' =>$data->jumlah_hari , 
+            //         'lembur_aw' =>$data->lembur_awal , 
+            //         'lembur_ak' =>$data->lembur_akhir , 
+            //         'tot_lembur' =>$data->total_lembur , 
+            //         'upah' =>$data->upah , 
+            //         'total_upah' =>$data->upah, 
+            //         'ket' =>$data->Keterangan , 
+            //         'created_at' =>Carbon::now() , 
+            //         'updated_at' =>Carbon::now() 
+
+            //  ]);
+            }
+        }
         }
             return view('admin.gaji.index', compact(['absensi', 'tanggal', 'date', 'tanggal2', 'tanggalCetak', 'dbName', 'refin', 'refout', 'divisi','referensi','pay'])); 
         }

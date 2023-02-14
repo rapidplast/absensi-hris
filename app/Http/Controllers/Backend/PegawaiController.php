@@ -216,7 +216,7 @@ class PegawaiController extends Controller
         $zk->connect();
         $pegawai = $zk->getUser();
         // $a = count($pegawai);
-        return response()->json($pegawai);
+        // return response()->json($pegawai);
 
         foreach($pegawai as $data){
             $check  = Pegawai::where('pid', $data[0])->first();

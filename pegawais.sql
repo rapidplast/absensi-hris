@@ -37,6 +37,7 @@ CREATE TABLE `gaji` (
 	`date` date,
 	`telat` time DEFAULT NULL,
 	`jam_kerja` BIGINT(20) DEFAULT NULL,
+  `jam_kerja_full` BIGINT(20) DEFAULT NULL,
 	`jum_hari` BIGINT(20) DEFAULT NULL,
 	`lembur_aw` BIGINT(20) DEFAULT NULL,
 	`lembur_ak` BIGINT(20) DEFAULT NULL,
