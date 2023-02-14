@@ -144,11 +144,12 @@ class PegawaiController extends Controller
 
 
         $pegawai = Pegawai::where('id', $id)->first();
-
-        // User::where('id', $pegawai->user_id)->update([
-        //     'email'         => $request->email,
-        //     'updated_at'    => Carbon::now()
-        // ]);
+        // return response()->json($request->nama);
+        User::where('id', $pegawai->user_id)->update([
+            'name'          => $request->nama,
+            'email'         => $request->email,
+            'updated_at'    => Carbon::now()
+        ]);
 
         DB::connection('mysql2')->table($dbName)->where('pid', $pegawai->pid)->update([
             'pid'   => $request->pid,
@@ -195,6 +196,10 @@ class PegawaiController extends Controller
             'sap'               => $request->nsap,
             'alamat'            => $request->alamat,
         ]);
+        //    User::where('id', $pegawai->user_id)->update([
+        //     'email'         => $request->email,
+        //     'updated_at'    => Carbon::now()
+        // ]);
 
         Session::put('sweetalert', 'success');
         return redirect()->route('editPegawai', $id)->with('alert', 'Sukses Mengubah '.$pegawai->nama);
