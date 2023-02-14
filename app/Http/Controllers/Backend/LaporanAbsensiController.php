@@ -101,7 +101,7 @@ class LaporanAbsensiController extends Controller
         //         $array[]=$date->format('Y-m-d');
         //     }
         //     print_r($array);
-            //
+            
         if ($checkMonth1 == $checkMonth2) {
             $year = date('Y', strtotime($tanggal));
             $month = date('m', strtotime($tanggal));

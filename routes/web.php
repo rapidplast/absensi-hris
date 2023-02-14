@@ -23,6 +23,7 @@ use App\Http\Controllers\Backend\ReferensiKerjaController;
 use App\Http\Controllers\Backend\ReguKerjaController;
 use App\Http\Controllers\Backend\SelfAttController;
 use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\PayController;
 use App\Http\Controllers\Backend\WorkFromHomeController;
 use App\Http\Controllers\Backend\UsersController;
 use App\Http\Controllers\Backend\DevController; //wsidik 13.09.2022
@@ -143,12 +144,12 @@ Route::group(['middleware' => ['web', 'auth', 'roles']], function(){
             Route::get('Cari-Data', [GajiController::class, 'index'])->name('searchGaji');
             Route::post('/Update/{id}', [GajiController::class, 'update'])->name('uptG');
         });
-                // ========== Gaji ========== //
+                // ========== Payroll ========== //
                 Route::group(['prefix' => 'Payroll'], function(){
-                    Route::get('/', [GajiController::class, 'index'])->name('pay');                              
-                    // Route::post('Cari-Data', [GajiController::class, 'index'])->name('searchGaji');
-                    Route::get('Cari-Data', [GajiController::class, 'index'])->name('searchPay');
-                    // Route::post('/Update/{id}', [GajiController::class, 'update'])->name('uptG');
+                    Route::get('/', [PayController::class, 'index'])->name('pay');                              
+                    
+                    Route::get('Cari-Data', [PayController::class, 'index'])->name('searchPay');
+                
                 });
         // ========== Attendance ========== //
         Route::group(['prefix' => 'Attendance'], function(){
