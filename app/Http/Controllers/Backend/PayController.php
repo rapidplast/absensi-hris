@@ -35,7 +35,8 @@ class PayController extends Controller
         $dt = $request->old('tanggal2');
         Session::put('name',$request->old('tanggal2'));
         $value = Session::get('name');      
-
+        $nipAwal = $request->nipAwal;
+        $nipAkhir = $request->nipAkhir;
         $absen = Pegawai::where('email', auth()->user()->email)-> first();
         $email = auth()->user()->email;
 
@@ -54,7 +55,7 @@ class PayController extends Controller
             $referensi  = ReferensiKerja::all();
             $refer = ReferensiKerja::where('id',62)->first();            
             $date = Carbon::now()->format('Y-m-d');
-
+            // return response()->json($refer->workin);
             $pay = DB::select(
                 "SELECT
                 afh.id,
@@ -157,7 +158,7 @@ class PayController extends Controller
             ORDER BY
                 afh.id DESC"
             );
-                return view('admin.pay.index', compact(['pay','tanggal2', 'tanggal', 'date', 'tanggalCetak', 'dbName', 'refin', 'refout', 'divisi','referensi']));
+                return view('admin.pay.index', compact(['nipAwal','nipAkhir','pay','tanggal2', 'tanggal', 'date', 'tanggalCetak', 'dbName', 'refin', 'refout', 'divisi','referensi']));
   
 
         } else if(empty($request->divisi)){            
@@ -278,7 +279,7 @@ class PayController extends Controller
             AND a.kode = 'BRG' 
         ORDER BY
             afh.id DESC");
-            return view('admin.pay.index', compact([ 'tanggal', 'date', 'tanggal2', 'tanggalCetak', 'dbName', 'refin', 'refout', 'divisi','referensi','pay']));
+            return view('admin.pay.index', compact([ 'nipAwal','nipAkhir','tanggal', 'date', 'tanggal2', 'tanggalCetak', 'dbName', 'refin', 'refout', 'divisi','referensi','pay']));
         }else{
 
             

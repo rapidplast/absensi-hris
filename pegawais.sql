@@ -791,7 +791,7 @@ COMMIT;
 
 --
 ALTER TABLE pegawais
-ADD column ref_id int(100) after departement;
+ADD column ref_id bigint(20) after departement;
 ALTER TABLE pegawais
 ADD FOREIGN KEY (ref_id) REFERENCES referensikerjas(id) ON DELETE CASCADE ON UPDATE CASCADE;
 -- Constraints for table `pegawais`
