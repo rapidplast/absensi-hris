@@ -62,21 +62,21 @@
                         </a>
                     @endif
                 </li>
-                <!-- <li class="nav-item">
+                <li class="nav-item">
                     @if (Auth()->user()->role->id == 1)
-{{-- <a href="{{route('absensi')}}" class="nav-link {{request()->is('Admin/Absensi') || request()->is('Admin/Absensi/*')  ? 'active' : ''}}"> --}}
-                        <a href="{{ route('gaji') }}"
-                            class="nav-link {{ request()->is('gaji') || request()->is('gaji/*') ? 'active' : '' }}">
+                        {{-- <a href="{{route('absensi')}}" class="nav-link {{request()->is('Admin/Absensi') || request()->is('Admin/Absensi/*')  ? 'active' : ''}}"> --}}
+                        <a href="{{ route('pay') }}"
+                            class="nav-link {{ request()->is('pay') || request()->is('pay/*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-comments"></i>
                             <p>
                                 Data Payroll
                             </p>
                         </a>
-@endif
+                    @endif
                 </li>
-                <li class="nav-item">
+               <!-- <li class="nav-item">
                     @if (Auth()->user()->role->id == 1)
-{{-- <a href="{{route('absensi')}}" class="nav-link {{request()->is('Admin/Absensi') || request()->is('Admin/Absensi/*')  ? 'active' : ''}}"> --}}
+                        {{-- <a href="{{route('absensi')}}" class="nav-link {{request()->is('Admin/Absensi') || request()->is('Admin/Absensi/*')  ? 'active' : ''}}"> --}}
                         <a href="{{ route('gaji') }}"
                             class="nav-link {{ request()->is('gaji') || request()->is('gaji/*') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-comments"></i>
@@ -84,8 +84,8 @@
                                 Data Gaji
                             </p>
                         </a>
-@endif
-                </li>-->
+                    @endif
+                </li> -->
                 <li class="nav-item">
                     @if (Auth()->user()->role->id == 2)
                         {{-- <a href="{{route('absensi')}}" class="nav-link {{request()->is('Admin/Absensi') || request()->is('Admin/Absensi/*')  ? 'active' : ''}}"> --}}

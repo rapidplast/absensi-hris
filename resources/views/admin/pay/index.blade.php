@@ -41,8 +41,7 @@
                                 <i class="fas fa-question"></i>
                             </button>
                         </div>
-                        <form action="{{ route('searchGaji') }}" method="GET" enctype="multipart/form-data"
-                            id="form-data">
+                        <form action="{{ route('searchPay') }}" method="GET" enctype="multipart/form-data" id="form-data">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
@@ -55,7 +54,7 @@
                                     </div>
                                     <div class="col-md-4">
                                         <span>Ke Tanggal</span>
-                                        @if (Route::is('searchGaji'))
+                                        @if (Route::is('searchPay'))
                                             <input type="date" id="tanggal2" name="tanggal2" class="form-control"
                                                 value="{{ $tanggal2 }}" required>
                                         @else
@@ -65,15 +64,16 @@
                                     </div>
                                     <p>
                                         <!-- Referensi Kerja -->
-                                        {{-- <div class="col-md-4">
-                                    
-                                    <span>Referensi Check In</span>
-                                    <input type="time" id="refin" name="refin" class="form-control" min="9:00:00" max="15:00:00" step="60" value="{{$refin}}" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <span>Referensi Check Out</span>                                    
-                                    <input type="time" id="refout" name="refout" class="form-control" value="{{$refout}}" required>                                                                        
-                                </div> --}}
+                                    <div class="col-md-4">
+                                        <span>NIP Karyawan</span>
+                                        <input type="number" id="nipAwal" name="nipAwal" class="form-control"
+                                            value="{{ $nipAwal }}" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <span>NIP Karyawan</span>
+                                        <input type="number" id="nipAkhir" name="nipAkhir" class="form-control"
+                                            value="{{ $nipAkhir }}" required>
+                                    </div>
                                     <p>
                                     <div class="col-md-4">
                                         <span>Divisi</span>
@@ -105,7 +105,7 @@
                                     </button>
                                 </div> --}}
                                     <div class="col-md-2">
-                                        <button type="submit" class="btn btn-success mt-4">Load Data</button>
+                                        <button type="submit" class="btn btn-success mt-4">Load Data Payroll</button>
                                     </div>
 
                                 </div>
@@ -160,23 +160,25 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>Tanggal</th>
                                         <th>NIP</th>
                                         <th>Nama</th>
+                                        <th>Referensi In</th>
+                                        <th>Referensi Out</th>
                                         <th>Check In</th>
                                         <th>Check Out</th>
                                         <th>Divisi</th>
-                                        <th>Shift</th>
-                                        <th>Tanggal</th>
                                         <th>Telat</th>
                                         <th>Jam Kerja</th>
-                                        {{-- <th>Jam Kerja Full</th> --}}
+                                        <th>Jam Kerja Full</th>
                                         <th>Jumlah Hari</th>
-                                        <th>Lembur Awal</th>
-                                        <th>Lembur Akhir</th>
-                                        <th>Total Lembur</th>
                                         <th>Upah</th>
+                                        <th>Lembur Awal</th>
+                                        <th>Cek Lembur Awal</th>
+                                        <th>Lembur Akhir</th>
+                                        <th>Cek Lembur Akhir</th>
                                         <th>Total Upah</th>
-
+                                        <th>Keterangan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -187,37 +189,25 @@
                                     @foreach ($pay as $data)
                                         <tr>
                                             <td>{{ $data->id }}</td>
+                                            <td>{{ $data->date }}</td>
                                             <td>{{ $data->pid }}</td>
                                             <td>{{ $data->nama }}</td>
+                                            <td>{{ $data->workin }}</td>
+                                            <td>{{ $data->workout }}</td>
                                             <td>{{ $data->check_in }}</td>
                                             <td>{{ $data->check_out }}</td>
-                                            <td>{{ $data->divisi_id }}</td>
-                                            <td>{{ $data->ref }}</td>
-                                            <td>{{ $data->date }}</td>
+                                            <td>{{ $data->divisi }}</td>
                                             <td>{{ $data->telat }}</td>
                                             <td>{{ $data->jam_kerja }}</td>
-                                            {{-- <td>{{ $data->jam_kerja_full }}</td> --}}
-                                            <td>{{ $data->jum_hari }}</td>
-                                            <td>{{ $data->lembur_aw }}</td>
-                                            <td>{{ $data->lembur_ak }}</td>
-                                            <td>{{ $data->tot_lembur }}
-                                                <div id="editStatus{{ $data->id }}" style="display:none">
-                                                    <form action="{{ route('uptG', $data->id) }}" method="POST"
-                                                        enctype="multipart/form-data" id="form-data"style="display: flex">
-                                                        @csrf
-                                                        <input type="text" name="lm"
-                                                            class="form-control @error('lm') is-invalid @enderror"
-                                                            id="lm" placeholder="Ketik Jumlah Lembur">
-                                                        <div style="margin-top: 5px; margin-left: 10px">
-                                                            <button type="submit" class="btn btn-primary">Done</button>
-                                                            <a href="" class="btn btn-sm"
-                                                                onclick="$('#editStatus{{ $data->id }}').hide(); $('#status{{ $data->id }}').show(); return false; ">&times;</a>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </td>
+                                            <td>{{ $data->jam_kerja_full }}</td>
+                                            <td>{{ $data->jumlah_hari }}</td>
                                             <td>{{ $data->upah }}</td>
+                                            <td>{{ $data->lembur_awal }}</td>
+                                            <td>{{ $data->cek_a }}</td>
+                                            <td>{{ $data->lembur_akhir }}</td>
+                                            <td>{{ $data->cek_ak }}</td>
                                             <td>{{ $data->total_upah }}</td>
+                                            <td>{{ $data->Keterangan }}</td>
                                             <td style="display: flex; justify-content: space-between">
                                                 @if (Auth()->user()->role->id == 1)
                                                     <a type="button" class="btn btn-warning" href=""
@@ -233,22 +223,25 @@
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
+                                        <th>Tanggal</th>
                                         <th>NIP</th>
                                         <th>Nama</th>
+                                        <th>Referensi In</th>
+                                        <th>Referensi Out</th>
                                         <th>Check In</th>
                                         <th>Check Out</th>
                                         <th>Divisi</th>
-                                        <th>Shift</th>
-                                        <th>Tanggal</th>
                                         <th>Telat</th>
                                         <th>Jam Kerja</th>
-                                        {{-- <th>Jam Kerja Full</th> --}}
+                                        <th>Jam Kerja Full</th>
                                         <th>Jumlah Hari</th>
-                                        <th>Lembur Awal</th>
-                                        <th>Lembur Akhir</th>
-                                        <th>Total Lembur</th>
                                         <th>Upah</th>
+                                        <th>Lembur Awal</th>
+                                        <th>Cek Lembur Awal</th>
+                                        <th>Lembur Akhir</th>
+                                        <th>Cek Lembur Akhir</th>
                                         <th>Total Upah</th>
+                                        <th>Keterangan</th>
                                         <th>Action</th>
                                     </tr>
                                 </tfoot>
