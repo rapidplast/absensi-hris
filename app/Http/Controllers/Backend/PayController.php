@@ -69,21 +69,21 @@ class PayController extends Controller
                 a.nama AS divisi,
             IF
                 (
-                    SUBTIME( afh.check_in, '$refer->workin' ) < ' 00:00:00', '00:00:00', SUBTIME( afh.check_in, '$refer->workin' )) AS telat, IF ( afh.check_in > '$refer->workin',
-                    DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' ),
+                    SUBTIME( afh.check_in, '06:00:00' ) < ' 00:00:00', '00:00:00', SUBTIME( afh.check_in, '06:00:00' )) AS telat, IF ( afh.check_in > '06:00:00',
+                    DATE_FORMAT( SUBTIME( '14:00:00', afh.check_in ), '%k' ),
                 IF
-                ( DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' )>= 8, 8, NULL )) AS jam_kerja,
+                ( DATE_FORMAT( SUBTIME( '14:00:00', afh.check_in ), '%k' )>= 8, 8, NULL )) AS jam_kerja,
             IF
                 (
-                    afh.check_out < '$refer->workout',
-                    DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workin' ), '%k' ),
+                    afh.check_out < '14:00:00',
+                    DATE_FORMAT( SUBTIME( afh.check_out, '06:00:00' ), '%k' ),
                 DATE_FORMAT(( SUBTIME( afh.check_out, afh.check_in )), '%k' )) AS jam_kerja_full,
             IF
                 (
                 IF
                     (
-                        afh.check_out < '$refer->workout',
-                        DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workin' ), '%k' ),
+                        afh.check_out < '14:00:00',
+                        DATE_FORMAT( SUBTIME( afh.check_out, '06:00:00' ), '%k' ),
                     DATE_FORMAT(( SUBTIME( afh.check_out, afh.check_in )), '%k' )) > 8,
                     1,
                     '' 
@@ -91,54 +91,54 @@ class PayController extends Controller
                 (
                 IF
                     (
-                        afh.check_in > '$refer->workin',
-                        DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' ),
+                        afh.check_in > '06:00:00',
+                        DATE_FORMAT( SUBTIME( '14:00:00', afh.check_in ), '%k' ),
                     IF
-                    ( DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' )>= 8, 8, NULL ))* 12500 
+                    ( DATE_FORMAT( SUBTIME( '14:00:00', afh.check_in ), '%k' )>= 8, 8, NULL ))* 12500 
                 ) AS upah,
             IF
                 (
-                    DATE_FORMAT( SUBTIME( '$refer->workin', afh.check_in ), '%k' ) <= 0,
+                    DATE_FORMAT( SUBTIME( '06:00:00', afh.check_in ), '%k' ) <= 0,
                     0,
-                DATE_FORMAT( SUBTIME( '$refer->workin', afh.check_in ), '%k' )) AS lembur_awal,
+                DATE_FORMAT( SUBTIME( '06:00:00', afh.check_in ), '%k' )) AS lembur_awal,
                 NULL AS cek_a,
             IF
                 (
-                    DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workout' ), '%k' )<= 0,
+                    DATE_FORMAT( SUBTIME( afh.check_out, '14:00:00' ), '%k' )<= 0,
                     0,
-                DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workout' ), '%k' )) AS lembur_akhir,
+                DATE_FORMAT( SUBTIME( afh.check_out, '14:00:00' ), '%k' )) AS lembur_akhir,
                 NULL AS cek_ak,
                 (
                 IF
                     (
-                        DATE_FORMAT( SUBTIME( '$refer->workin', afh.check_in ), '%k' ) <= 0,
+                        DATE_FORMAT( SUBTIME( '06:00:00', afh.check_in ), '%k' ) <= 0,
                         0,
-                    DATE_FORMAT( SUBTIME( '$refer->workin', afh.check_in ), '%k' ))+
+                    DATE_FORMAT( SUBTIME( '06:00:00', afh.check_in ), '%k' ))+
                 IF
                     (
-                        DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workout' ), '%k' )<= 0,
+                        DATE_FORMAT( SUBTIME( afh.check_out, '14:00:00' ), '%k' )<= 0,
                         0,
-                    DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workout' ), '%k' ))* 12500 
+                    DATE_FORMAT( SUBTIME( afh.check_out, '14:00:00' ), '%k' ))* 12500 
                     )+(
                 IF
                     (
-                        afh.check_in > '$refer->workin',
-                        DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' ),
+                        afh.check_in > '06:00:00',
+                        DATE_FORMAT( SUBTIME( '14:00:00', afh.check_in ), '%k' ),
                     IF
-                    ( DATE_FORMAT( SUBTIME( '$refer->workout', afh.check_in ), '%k' )>= 8, 8, NULL ))* 12500 
+                    ( DATE_FORMAT( SUBTIME( '14:00:00', afh.check_in ), '%k' )>= 8, 8, NULL ))* 12500 
                 ) AS total_upah,
             IF
                 ((
                     IF
                         (
-                            DATE_FORMAT( SUBTIME( '$refer->workin', afh.check_in ), '%k' ) <= 0,
+                            DATE_FORMAT( SUBTIME( '06:00:00', afh.check_in ), '%k' ) <= 0,
                             0,
-                        DATE_FORMAT( SUBTIME( '$refer->workin', afh.check_in ), '%k' )) +
+                        DATE_FORMAT( SUBTIME( '06:00:00', afh.check_in ), '%k' )) +
                     IF
                         (
-                            DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workout' ), '%k' )<= 0,
+                            DATE_FORMAT( SUBTIME( afh.check_out, '14:00:00' ), '%k' )<= 0,
                             0,
-                        DATE_FORMAT( SUBTIME( afh.check_out, '$refer->workout' ), '%k' )) > 0 
+                        DATE_FORMAT( SUBTIME( afh.check_out, '14:00:00' ), '%k' )) > 0 
                         ),
                     'Lembur',
                     '' 
