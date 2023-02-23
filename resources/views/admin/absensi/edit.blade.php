@@ -43,45 +43,46 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        {{-- <?php $absensi = Session::get('absensi');?> --}}
-                        {{-- @if(is_array($absensi)||is_object($absensi)) --}}
-                        {{-- @foreach((object)$absensi as $data) --}}
-                        
+                        {{-- <?php $absensi = Session::get('absensi'); ?> --}}
+                        {{-- @if (is_array($absensi) || is_object($absensi)) --}}
+                        {{-- @foreach ((object) $absensi as $data) --}}
+
                         <form action="{{ route('updateAbsensi', $id) }}" method="POST" enctype="multipart/form-data">
-                            @csrf                            
+                            @csrf
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="check_in">Check In</label>
-                                    
+
                                     <input type="time" class="form-control @error('check_in') is-invalid @enderror"
-                                        name="check_in" id="check_in" placeholder="Ketik Jam Checkin" value="{{$b}}">                                    
+                                        name="check_in" id="check_in" placeholder="Ketik Jam Checkin"
+                                        value="{{ $b }}">
                                     @error('check_in')
                                         <div class="invalid-feedback">
                                             {{ $message }}
-                                        </div>                                        
+                                        </div>
                                     @enderror
-                                    
+
                                 </div>
 
                                 <div class="form-group">
                                     <label for="check_out">Check Out</label>
                                     <input type="time" class="form-control @error('check_out') is-invalid @enderror"
                                         name="check_out" id="check_out" placeholder="Ketik Jam CheckOut"
-                                        value="{{$c}}">
+                                        value="{{ $c }}">
 
                                     @error('check_out')
                                         <div class="invalid-feedback">
                                             {{ $message }}
                                         </div>
                                     @enderror
-                                    
+
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label for="sync_date">Tanggal</label>
                                     <input type="date" class="form-control @error('sync_date') is-invalid @enderror"
                                         name="sync_date" id="sync_date" placeholder="Ketik Tanggal"
-                                        value="{{$d}}">
+                                        value="{{ $d }}">
 
                                     @error('sync_date')
                                         <div class="invalid-feedback">
@@ -105,7 +106,7 @@
                                     <label for="check_in1">Check In1</label>
                                     <input type="time" class="form-control @error('check_in1') is-invalid @enderror"
                                         name="check_in1" id="check_in1" placeholder="Ketik Jam Checkin"
-                                        value="{{ old('check_in1') }}">
+                                        value="{{ $e }}">
 
                                     @error('check_in1')
                                         <div class="invalid-feedback">
@@ -117,7 +118,7 @@
                                     <label for="check_out1">Check Out1</label>
                                     <input type="time" class="form-control @error('check_out1') is-invalid @enderror"
                                         name="check_out1" id="check_out1" placeholder="Ketik Jam CheckOut"
-                                        value="{{ old('check_out1') }}">
+                                        value="{{ $f }}">
 
                                     @error('check_out1')
                                         <div class="invalid-feedback">

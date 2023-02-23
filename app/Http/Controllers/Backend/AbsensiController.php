@@ -731,6 +731,12 @@ class AbsensiController extends Controller
                 foreach($absen as $a){    
                     $d = DATE('Y-m-d' , strtotime($absen->sync_date));
                 }
+                foreach($absen as $a){
+                    $e = $absen->check_in1;
+                }
+                foreach($absen as $a){
+                    $f = $absen->check_out1;
+                }
                 foreach($absen as $a){      
         
                 //         $pegawai = Pegawai::where('pid', $absen->pid)->first();
@@ -787,6 +793,12 @@ class AbsensiController extends Controller
                 foreach($absen as $a){    
                     $d = DATE('Y-m-d' , strtotime($absen->sync_date));
                 }
+                foreach($absen as $a){
+                    $e = $absen->check_in1;
+                }
+                foreach($absen as $a){
+                    $f = $absen->check_out1;
+                }
                 foreach($absen as $a){      
         
                         $pegawai = Pegawai::where('pid', $absen->pid)->first();
@@ -838,6 +850,12 @@ class AbsensiController extends Controller
                 }
                 foreach($absen as $a){    
                     $d = DATE('Y-m-d' , strtotime($absen->sync_date));
+                }
+                foreach($absen as $a){
+                    $e = $absen->check_in1;
+                }
+                foreach($absen as $a){
+                    $f = $absen->check_out1;
                 }
                 foreach($absen as $a){      
         
@@ -891,6 +909,12 @@ class AbsensiController extends Controller
                 foreach($absen as $a){    
                     $d = DATE('Y-m-d' , strtotime($absen->sync_date));
                 }
+                foreach($absen as $a){
+                    $e = $absen->check_in1;
+                }
+                foreach($absen as $a){
+                    $f = $absen->check_out1;
+                }
                 foreach($absen as $a){      
         
                         $pegawai = Pegawai::where('pid', $absen->pid)->first();
@@ -942,6 +966,12 @@ class AbsensiController extends Controller
                 }
                 foreach($absen as $a){    
                     $d = DATE('Y-m-d' , strtotime($absen->sync_date));
+                }
+                foreach($absen as $a){
+                    $e = $absen->check_in1;
+                }
+                foreach($absen as $a){
+                    $f = $absen->check_out1;
                 }
                 foreach($absen as $a){      
         
@@ -1053,7 +1083,7 @@ class AbsensiController extends Controller
         // $Absensi =(object)DB::connection('mysql2')->table($dbName)->get();
         // $count = (COUNT($Absensi) - 1 );  
 
-        return view('admin.absensi.edit', compact(['Absensi','id','b','c','d','late']));
+        return view('admin.absensi.edit', compact(['Absensi','id','b','c','d','e','f','late']));
         // return response()->json($d);
         
         // $Absensi = DB::connection('mysql2')->table($dbName) ->where([

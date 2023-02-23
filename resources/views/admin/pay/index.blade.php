@@ -75,7 +75,7 @@
                                             value="{{ $nipAkhir }}" required>
                                     </div>
                                     <p>
-                                    <div class="col-md-4">
+                                        {{-- <div class="col-md-4">
                                         <span>Divisi</span>
                                         <select name="divisi" id="divisi"
                                             class="form-control @error('divisi') is-invalid @enderror">
@@ -86,20 +86,20 @@
                                                     {{ $divisi->nama }}</option>
                                             @endforeach
                                         </select>
-                                    </div>
-                                    {{-- <div class="col-md-1 text-center">
+                                    </div> --}}
+                                        {{-- <div class="col-md-1 text-center">
                                     <button type="button" id="sync-absensi" class="btn btn-warning mt-4">
                                         Tarik Absensi
                                     </button>
                                 </div> --}}
-                                    {{-- @if (Auth()->user()->role->id == 1)
+                                        {{-- @if (Auth()->user()->role->id == 1)
                                 <div class="col-md-2 text-right">
                                     <button type="button" id="sync-absensi3" class="btn btn-warning mt-4">
                                         Tarik Attendance
                                     </button>
                                 </div>
                                @endif --}}
-                                    {{-- <div class="col-md-1 text-center">
+                                        {{-- <div class="col-md-1 text-center">
                                     <button type="button" id="sync-absensi2" class="btn btn-danger mt-4">
                                         Tarik Log 
                                     </button>
@@ -192,8 +192,8 @@
                                             <td>{{ $data->date }}</td>
                                             <td>{{ $data->pid }}</td>
                                             <td>{{ $data->nama }}</td>
-                                            <td>{{ $data->workin }}</td>
-                                            <td>{{ $data->workout }}</td>
+                                            <td>{{ $data->check_in1 }}</td>
+                                            <td>{{ $data->check_out1 }}</td>
                                             <td>{{ $data->check_in }}</td>
                                             <td>{{ $data->check_out }}</td>
                                             <td>{{ $data->divisi }}</td>

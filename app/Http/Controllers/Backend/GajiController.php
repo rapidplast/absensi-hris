@@ -86,7 +86,7 @@ class GajiController extends Controller
                 return view('admin.gaji.index', compact(['pay','tanggal2', 'tanggal', 'date', 'tanggalCetak', 'dbName', 'refin', 'refout', 'divisi','referensi']));
   
 
-        } else if(empty($request->divisi)){            
+        }else if(empty($request->divisi)){            
             $date = Carbon::now()->format('Y-m-d');
             $year = date('Y', strtotime($request->tanggal));
             $month = date('m', strtotime($request->tanggal));

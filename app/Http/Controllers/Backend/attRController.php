@@ -114,10 +114,10 @@ class attRController extends Controller
                     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
                 }
                 // return response()->json($checkAbsen);
-                // if(strtotime('2023-01-03') === strtotime('2023-01-03')){
-                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-01-03')->get();
+                // if(strtotime('2023-02-22') === strtotime('2023-02-22')){
+                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-02-22')->get();
                 // }else{
-                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-01-03', '2023-01-03'])->get();
+                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-02-22', '2023-02-22'])->get();
                 // }
                 // return response()->json($absenMentah);
                 if(!is_null($absenMentah)){
@@ -135,9 +135,42 @@ class attRController extends Controller
                         if($checkPegawai === null || empty($checkPegawai) || $checkPegawai == ''){
                             // return response()->json($checkPegawai);
                             $pegawai    = Pegawai::where('pid', $row->pid)->first();
-                            // return response()->json($pegawai);
+                            $ref = ReferensiKerja::where('id',$pegawai->ref_id)->first();
+                            // return response()->json($ref);   
+                            if(!empty($ref)){
+                            // return response()->json($ref);   
                         if(!is_null($pegawai)){                  
-                            // return response()->json($pegawai);          
+                           
+                            $clock      = date('H:i:s' , strtotime($row->date));
+                            // return response()->json($clock);
+                            if($row->status == 0 || $row->status == 4){
+                                // return response()->json($row->status);
+                                DB::connection('mysql2')->table($dbName)->insert([
+                                    'pid'       => $row->pid,
+                                    'sap'       => $pegawai->sap,
+                                    'check_in'  => $clock,
+                                    'check_in1' => $ref->workin,
+                                    'check_out1' => $ref->workout,
+                                    'telat'     => '00:00:00',
+                                    'sync_date' => $row->date,
+                                    'updated_at' => Carbon::now()
+                                ]);
+                            }else{
+                                DB::connection('mysql2')->table($dbName)->insert([
+                                    'pid'       => $row->pid,
+                                    'sap'       => $pegawai->sap,
+                                    'check_out'  => $clock,
+                                    'check_in1' => $ref->workin,
+                                    'check_out1' => $ref->workout,
+                                    'telat'     => '00:00:00',
+                                    'sync_date' => $row->date,
+                                    'updated_at' => Carbon::now()
+                                ]);
+                            }
+                        }
+                    }else{
+                        if(!is_null($pegawai)){                  
+                           
                             $clock      = date('H:i:s' , strtotime($row->date));
                             // return response()->json($clock);
                             if($row->status == 0 || $row->status == 4){
@@ -161,6 +194,7 @@ class attRController extends Controller
                                 ]);
                             }
                         }
+                    }
                     }else{   
                         $checkAbsen = DB::connection('mysql2')->table($dbName)->where([
                             ['pid', $row->pid],
@@ -253,14 +287,12 @@ class attRController extends Controller
                     'updated_at' => Carbon::now()
                 ]);
                }                     
-            }
-                // return response()->json($pegawai->sap);
-        }
-
-
-                
+            }       
+        }     
                 }
             }
+            
+
                 $absenMentah = DB::select("
                 DELETE FROM absen_mentahs
                 ");
@@ -271,6 +303,8 @@ class attRController extends Controller
                     'created_at'    => Carbon::now(),
                     'updated_at'    => Carbon::now()
                 ]);
+
+                // return response()->json($dbName);
             }else{
                 Session::put('sweetalert', 'error');
                 return response()->json(['error' => 'Gagal Import Absensi ! Mungkin data sudah terhapus !']);
