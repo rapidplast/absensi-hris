@@ -179,6 +179,8 @@ class attRController extends Controller
                                     'pid'       => $row->pid,
                                     'sap'       => $pegawai->sap,
                                     'check_in'  => $clock,
+                                    // 'check_in1' => $ref->workin,
+                                    // 'check_out1' => $ref->workout,
                                     'telat'     => '00:00:00',
                                     'sync_date' => $row->date,
                                     'updated_at' => Carbon::now()
@@ -188,6 +190,8 @@ class attRController extends Controller
                                     'pid'       => $row->pid,
                                     'sap'       => $pegawai->sap,
                                     'check_out'  => $clock,
+                                    // 'check_in1' => $ref->workin,
+                                    // 'check_out1' => $ref->workout,
                                     'telat'     => '00:00:00',
                                     'sync_date' => $row->date,
                                     'updated_at' => Carbon::now()
@@ -202,6 +206,7 @@ class attRController extends Controller
                         ])->first();
                             // return response()->json($checkAbsen);
                     $pegawai    = Pegawai::where('pid', $row->pid)->first();
+                    // $ref = ReferensiKerja::where('id',$pegawai->ref_id)->first();
                     // return response()->json($pegawai);
                     if(!is_null($pegawai)){  
                     $clock      = date('H:i:s' , strtotime($row->date));
@@ -212,6 +217,8 @@ class attRController extends Controller
                             [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
                         ])->update([
                             'check_in'  => $clock,
+                            // 'check_in1' => $ref->workin,
+                            // 'check_out1' => $ref->workout,
                             'sync_date' => $row->date,
                             'updated_at' => Carbon::now()
                         ]);
@@ -222,6 +229,8 @@ class attRController extends Controller
                             [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
                         ])->update([
                             'check_out'  => $clock,
+                            // 'check_in1' => $ref->workin,
+                            // 'check_out1' => $ref->workout,
                             'sync_date' => $row->date,
                             'updated_at' => Carbon::now()
                         ]);
@@ -234,6 +243,7 @@ class attRController extends Controller
                 if($checkPegawai4 === null || empty($checkPegawai4) || $checkPegawai4 == ''){
                     // return response()->json($checkPegawai);
                     $pegawai    = Pegawai::where('pid', $row->pid)->first();
+                    $ref = ReferensiKerja::where('id',$pegawai->ref_id)->first();
                 if(!is_null($pegawai)){                            
                     $clock      = date('H:i:s' , strtotime($row->date));
                     if($row->status == 0 || $row->status == 4){
@@ -241,6 +251,8 @@ class attRController extends Controller
                             'pid'       => $row->pid,
                             'sap'       => $pegawai->sap,
                             'check_in'  => $clock,
+                            // 'check_in1' => $ref->workin,
+                            // 'check_out1' => $ref->workout,
                             'telat'     => '00:00:00',
                             'sync_date' => $row->date,
                             'updated_at' => Carbon::now()
@@ -250,6 +262,8 @@ class attRController extends Controller
                             'pid'       => $row->pid,
                             'sap'       => $pegawai->sap,
                             'check_out'  => $clock,
+                            // 'check_in1' => $ref->workin,
+                            // 'check_out1' => $ref->workout,
                             'telat'     => '00:00:00',
                             'sync_date' => $row->date,
                             'updated_at' => Carbon::now()
@@ -263,6 +277,7 @@ class attRController extends Controller
                 ])->first();
                     // return response()->json($checkAbsen);
             $pegawai    = Pegawai::where('pid', $row->pid)->first();
+            $ref = ReferensiKerja::where('id',$pegawai->ref_id)->first();
             // return response()->json($pegawai);
             if(!is_null($pegawai)){  
             $clock      = date('H:i:s' , strtotime($row->date));
@@ -273,6 +288,8 @@ class attRController extends Controller
                     [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
                 ])->update([
                     'check_in'  => $clock,
+                    // 'check_in1' => $ref->workin,
+                    // 'check_out1' => $ref->workout,
                     'sync_date' => $row->date,
                     'updated_at' => Carbon::now()
                 ]);
@@ -283,6 +300,8 @@ class attRController extends Controller
                     [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
                 ])->update([
                     'check_out'  => $clock,
+                    // 'check_in1' => $ref->workin,
+                    // 'check_out1' => $ref->workout,
                     'sync_date' => $row->date,
                     'updated_at' => Carbon::now()
                 ]);
