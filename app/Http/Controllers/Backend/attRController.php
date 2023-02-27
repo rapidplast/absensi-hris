@@ -38,7 +38,7 @@ class attRController extends Controller
             $absensi = DB::select(
                 "SELECT afh.id,afh.pid, p.nama, p.departement, afh.check_in, afh.check_out, afh.telat, afh.izin, afh.check_in1, afh.check_out1, afh.check_in2, afh.check_out2, afh.check_in3, afh.check_out3, afh.sync_date, afh.absen1, afh.absen2
                 FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
-                WHERE p.pid = afh.pid AND DATE(afh.sync_date) = '2023-02-26'
+                WHERE p.pid = afh.pid AND DATE(afh.sync_date) = '$date'
                 ORDER BY afh.id DESC"
             );
             return view('admin.absensi.index', compact(['absensi', 'tanggal', 'date', 'tanggalCetak', 'dbName']));
@@ -167,10 +167,10 @@ class attRController extends Controller
                             ['pid', $row->pid],
                             [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))]
                         ])->first();
-                        $i = date('Y-m-d', strtotime($row->date));
+                        // $i = date('Y-m-d', strtotime($row->date));
                             // return response()->json($i);
                     $pegawai    = Pegawai::where('pid', $row->pid)->first();
-                    return response()->json($pegawai);
+                    // return response()->json($pegawai);
                     if(!is_null($pegawai)){  
                     $clock      = date('H:i:s' , strtotime($row->date));
                     // return response()->json($clock);
