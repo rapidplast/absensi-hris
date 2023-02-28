@@ -115,10 +115,10 @@ class attRController extends Controller
                     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
                 }    
                 // return response()->json($checkAbsen);
-                // if(strtotime('2023-02-26') === strtotime('2023-02-26')){
-                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-02-26')->get();
+                // if(strtotime('2023-02-28') === strtotime('2023-02-28')){
+                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-02-28')->get();
                 // }else{
-                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-02-26', '2023-02-26'])->get();
+                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-02-28', '2023-02-28'])->get();
                 // }
                 // return response()->json($absenMentah);
                 if(!is_null($absenMentah)){
@@ -132,36 +132,67 @@ class attRController extends Controller
                         // SELECT db.* FROM absensi_frhistory.$dbName4 db
                         // WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
                         // ");
-                        // return response()->json($row);
+                        // return response()->json($checkPegawai);
                         if($checkPegawai === null || empty($checkPegawai) || $checkPegawai == ''){
                             // return response()->json($checkPegawai);
                             $pegawai    = Pegawai::where('pid', $row->pid)->first();
-                            // return response()->json($pegawai);
+                            $ref = ReferensiKerja::where('id',$pegawai->ref_id)->first();
+                            // return response()->json(empty($ref));
+                            // if(!empty()){
+
+                            // }
                         if(!is_null($pegawai)){                  
                             // return response()->json($pegawai);          
                             $clock      = date('H:i:s' , strtotime($row->date));
-                            // return response()->json($clock);
+                            // return response()->json(empty($ref));
+                            if(empty($ref)){
+                                if($row->status == 0 || $row->status == 4){
+                                    // return response()->json($row->status);
+                                    DB::connection('mysql2')->table($dbName)->insert([
+                                        'pid'       => $row->pid,
+                                        'sap'       => $pegawai->sap,
+                                        'check_in'  => $clock,
+                                        'telat'     => '00:00:00',
+                                        'sync_date' => $row->date,
+                                        'updated_at' => Carbon::now()
+                                    ]);
+                                }elseif($row->status == 1 || $row->status == 5){
+                                    DB::connection('mysql2')->table($dbName)->insert([
+                                        'pid'       => $row->pid,
+                                        'sap'       => $pegawai->sap,
+                                        'check_out'  => $clock,
+                                        'telat'     => '00:00:00',
+                                        'sync_date' => $row->date,
+                                        'updated_at' => Carbon::now()
+                                    ]);
+                                }
+                            }elseif(!empty($ref)){
                             if($row->status == 0 || $row->status == 4){
                                 // return response()->json($row->status);
                                 DB::connection('mysql2')->table($dbName)->insert([
                                     'pid'       => $row->pid,
                                     'sap'       => $pegawai->sap,
                                     'check_in'  => $clock,
+                                    'check_in1' => $ref->workin, 
+                                    'check_out1' => $ref->workout,
                                     'telat'     => '00:00:00',
                                     'sync_date' => $row->date,
                                     'updated_at' => Carbon::now()
                                 ]);
-                            }else{
+                            }elseif($row->status == 1 || $row->status == 5){
                                 DB::connection('mysql2')->table($dbName)->insert([
                                     'pid'       => $row->pid,
                                     'sap'       => $pegawai->sap,
-                                    'check_out'  => $clock,
+                                    'check_out'  => $clock, 
+                                    'check_in1' => $ref->workin, 
+                                    'check_out1' => $ref->workout,                                   
                                     'telat'     => '00:00:00',
                                     'sync_date' => $row->date,
                                     'updated_at' => Carbon::now()
                                 ]);
                             }
                         }
+                    }
                     }else{   
                         $checkAbsen = DB::connection('mysql2')->table($dbName)->where([
                             ['pid', $row->pid],

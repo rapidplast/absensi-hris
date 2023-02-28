@@ -720,8 +720,8 @@ class AbsensiController extends Controller
                 [DB::raw('DATE(date)') , date('Y-m-d', strtotime($Absensi->sync_date))]
                 ])->get();
             
-                $absen =(object)DB::connection('mysql2')->table($dbName)->where('check_in',$Absensi->check_in)->first();
-
+                // $absen =(object)DB::connection('mysql2')->table($dbName)->where('check_in',$Absensi->check_in)->first();
+                $absen =(object)DB::connection('mysql2')->table($dbName)->where('id',$Absensi->id)->first();
                 foreach($absen as $a){
                     $b = $absen->check_in;
                 }
@@ -782,7 +782,7 @@ class AbsensiController extends Controller
                 [DB::raw('DATE(date)') , date('Y-m-d', strtotime($Absensi4->sync_date))]
                 ])->get();
             
-                $absen =(object)DB::connection('mysql2')->table($dbName4)->where('check_in',$Absensi4->check_in)->first();
+                $absen =(object)DB::connection('mysql2')->table($dbName4)->where('id',$Absensi4->id)->first();
 
                 foreach($absen as $a){
                     $b = $absen->check_in;
@@ -840,7 +840,7 @@ class AbsensiController extends Controller
                 [DB::raw('DATE(date)') , date('Y-m-d', strtotime($Absensi3->sync_date))]
                 ])->get();
             
-                $absen =(object)DB::connection('mysql2')->table($dbName4)->where('check_in',$Absensi3->check_in)->first();
+                $absen =(object)DB::connection('mysql2')->table($dbName4)->where('id',$Absensi3->id)->first();
 
                 foreach($absen as $a){
                     $b = $absen->check_in;
@@ -898,7 +898,7 @@ class AbsensiController extends Controller
                 [DB::raw('DATE(date)') , date('Y-m-d', strtotime($Absensi2->sync_date))]
                 ])->get();
             
-                $absen =(object)DB::connection('mysql2')->table($dbName4)->where('check_in',$Absensi2->check_in)->first();
+                $absen =(object)DB::connection('mysql2')->table($dbName4)->where('id',$Absensi2->id)->first();
 
                 foreach($absen as $a){
                     $b = $absen->check_in;
@@ -956,7 +956,7 @@ class AbsensiController extends Controller
                 [DB::raw('DATE(date)') , date('Y-m-d', strtotime($Absensi1->sync_date))]
                 ])->get();
             
-                $absen =(object)DB::connection('mysql2')->table($dbName4)->where('check_in',$Absensi1->check_in)->first();
+                $absen =(object)DB::connection('mysql2')->table($dbName4)->where('id',$Absensi1->id)->first();
 
                 foreach($absen as $a){
                     $b = $absen->check_in;
@@ -1126,7 +1126,7 @@ class AbsensiController extends Controller
     function update(Request $request, $id){
         $date  = $request->sync_date;         
         // $tangga = (object)($request->sync_date);
-        // return response()->json($id);
+        // return response()->json($date);
         $year   = Carbon::now()->format('Y');
         $month  = Carbon::now()->format('m');
         $dbName = $year.''.$month.'HISTORY';
@@ -1153,25 +1153,26 @@ class AbsensiController extends Controller
         $dbName2 = $year.''.$month2.'HISTORY';
         $dbName1 = $year.''.$month1.'HISTORY';
 
-        $dbCheck4 = Schema::connection('mysql2')->hasTable($dbName4);
-        $dbCheck3 = Schema::connection('mysql2')->hasTable($dbName3);
-        $dbCheck2 = Schema::connection('mysql2')->hasTable($dbName2);
-        $dbCheck1 = Schema::connection('mysql2')->hasTable($dbName1);
+        // $dbCheck4 = Schema::connection('mysql2')->hasTable($dbName4);
+        // $dbCheck3 = Schema::connection('mysql2')->hasTable($dbName3);
+        // $dbCheck2 = Schema::connection('mysql2')->hasTable($dbName2);
+        // $dbCheck1 = Schema::connection('mysql2')->hasTable($dbName1);
         // return response()->json($dbCheck4);
                 
         // $absensi    = (object)DB::connection('mysql2')->table($dbName)->first();
         // $Absensi    = (object)DB::connection('mysql2')->table($dbName)->where('id',$id)->first();
         // return response()->json($Absensi);
         // $pegawai    = Pegawai::where('pid',$Absensi->pid)->first();
-        // return response()->json($pegawai);
+        // return response()->json($dbName);
         $Absensi = DB::connection('mysql2')->table($dbName)->where([
             ['id',$id],
-            [DB::raw('DATE(sync_date)'),$date]])->first(); 
+            [DB::raw('DATE(sync_date)'),$request->sync_date]])->first(); 
 
         $Absensi4 = DB::connection('mysql2')->table($dbName4)->where([
             ['id',$id],
-            [DB::raw('DATE(sync_date)'),$date]])->first();
-            // return response()->json($date);
+            [DB::raw('DATE(sync_date)'),$request->sync_date]])->first();
+            // return response()->json($request->sync_date);
+            // return response()->json($Absensi);
         // $Absensi3 = DB::connection('mysql2')->table($dbName3)->where([
         //         ['id',$id],
         //         [DB::raw('DATE(sync_date)'),$date]])->first(); 
@@ -1233,7 +1234,7 @@ class AbsensiController extends Controller
                     'updated_at'    => Carbon::now()
                 ]);
                 // $gaji = Gaji::where();
-                // return response()->json($tanggal);
+                // return response()->json($i);
         }elseif(!empty($Absensi4)){
             $absenmentah = AbsenMentah::where([            
                 ['pid', $Absensi4->pid],
@@ -1508,20 +1509,19 @@ class AbsensiController extends Controller
         $dbName2 = $year.''.$month2.'HISTORY';
         $dbName1 = $year.''.$month1.'HISTORY';
        
-        $dbCheck4 = Schema::connection('mysql2')->hasTable($dbName4);
-        $dbCheck3 = Schema::connection('mysql2')->hasTable($dbName3);
-        $dbCheck2 = Schema::connection('mysql2')->hasTable($dbName2);
-        $dbCheck1 = Schema::connection('mysql2')->hasTable($dbName1);
-
+        // $dbCheck4 = Schema::connection('mysql2')->hasTable($dbName4);
+        // $dbCheck3 = Schema::connection('mysql2')->hasTable($dbName3);
+        // $dbCheck2 = Schema::connection('mysql2')->hasTable($dbName2);
+        // $dbCheck1 = Schema::connection('mysql2')->hasTable($dbName1);
 
         $absen      = DB::connection('mysql2')->table($dbName)
         ->where('id',$id)->first();
         $absen4      = DB::connection('mysql2')->table($dbName4)
         ->where('id',$id)->first();
-        $absen3      = DB::connection('mysql2')->table($dbName2)
-        ->where('id',$id)->first();
-        $absen2      = DB::connection('mysql2')->table($dbName2)
-        ->where('id',$id)->first();
+        // $absen3      = DB::connection('mysql2')->table($dbName2)
+        // ->where('id',$id)->first();
+        // $absen2      = DB::connection('mysql2')->table($dbName2)
+        // ->where('id',$id)->first();
         // return response()->json($absen);
         if(!empty($absen)){
             DB::connection('mysql2')->table($dbName)->where('id',$id)->delete();
@@ -1535,7 +1535,21 @@ class AbsensiController extends Controller
     }else{
         DB::connection('mysql2')->table($dbName1)->where('id',$id)->delete();
     }
+    }
 
+    function destroy1($id){
+        $year       = Carbon::now()->format('Y');
+        $month      = Carbon::now()->format('m');
+        $dbName     = $year.''.$month.'HISTORY';
+
+        $absen      = DB::connection('mysql2')->table($dbName)
+        ->where('id',$id)->first();
+
+        if(!empty($absen)){
+            DB::connection('mysql2')->table($dbName)->where('id',$id)->delete();
+        }
+        // return response()->json(!empty($absen));
+    }
     function syncData2(Request $request){
         $tanggal = $request->tanggal;
         $tanggal2 = $request->tanggal2;
@@ -1569,5 +1583,5 @@ class AbsensiController extends Controller
             }
         }
     }
-}
+
 }
