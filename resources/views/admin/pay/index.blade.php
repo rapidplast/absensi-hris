@@ -67,12 +67,12 @@
                                     <div class="col-md-4">
                                         <span>NIP Karyawan</span>
                                         <input type="number" id="nipAwal" name="nipAwal" class="form-control"
-                                            value="{{ $nipAwal }}" required>
+                                            value="{{ $nipAwal }}">
                                     </div>
                                     <div class="col-md-4">
                                         <span>NIP Karyawan</span>
                                         <input type="number" id="nipAkhir" name="nipAkhir" class="form-control"
-                                            value="{{ $nipAkhir }}" required>
+                                            value="{{ $nipAkhir }}">
                                     </div>
                                     <p>
                                         {{-- <div class="col-md-4">

@@ -128,10 +128,10 @@ class attRController extends Controller
                         SELECT db.* FROM absensi_frhistory.$dbName db
                         WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
                         ");
-                        // $checkPegawai4 = DB::select("
-                        // SELECT db.* FROM absensi_frhistory.$dbName4 db
-                        // WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
-                        // ");
+                        $checkPegawai4 = DB::select("
+                        SELECT db.* FROM absensi_frhistory.$dbName4 db
+                        WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
+                        ");
                         // return response()->json($checkPegawai);
                         if($checkPegawai === null || empty($checkPegawai) || $checkPegawai == ''){
                             // return response()->json($checkPegawai);
@@ -230,65 +230,65 @@ class attRController extends Controller
                 }
                 
 
-        //         if($checkPegawai4 === null || empty($checkPegawai4) || $checkPegawai4 == ''){
-        //             // return response()->json($checkPegawai);
-        //             $pegawai    = Pegawai::where('pid', $row->pid)->first();
-        //         if(!is_null($pegawai)){                            
-        //             $clock      = date('H:i:s' , strtotime($row->date));
-        //             if($row->status == 0 || $row->status == 4){
-        //                 DB::connection('mysql2')->table($dbName4)->insert([
-        //                     'pid'       => $row->pid,
-        //                     'sap'       => $pegawai->sap,
-        //                     'check_in'  => $clock,
-        //                     'telat'     => '00:00:00',
-        //                     'sync_date' => $row->date,
-        //                     'updated_at' => Carbon::now()
-        //                 ]);
-        //             }else{
-        //                 DB::connection('mysql2')->table($dbName4)->insert([
-        //                     'pid'       => $row->pid,
-        //                     'sap'       => $pegawai->sap,
-        //                     'check_out'  => $clock,
-        //                     'telat'     => '00:00:00',
-        //                     'sync_date' => $row->date,
-        //                     'updated_at' => Carbon::now()
-        //                 ]);
-        //             }
-        //         }
-        //     }else{   
-        //         $checkAbsen = DB::connection('mysql2')->table($dbName4)->where([
-        //             ['pid', $row->pid],
-        //             [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))]
-        //         ])->first();
-        //             // return response()->json($checkAbsen);
-        //     $pegawai    = Pegawai::where('pid', $row->pid)->first();
-        //     // return response()->json($pegawai);
-        //     if(!is_null($pegawai)){  
-        //     $clock      = date('H:i:s' , strtotime($row->date));
-        //     // return response()->json($clock);
-        //     if(empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && $row->status == 0 || $row->status == 4){
-        //         DB::connection('mysql2')->table($dbName4)->where([
-        //             ['pid', $row->pid],
-        //             [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
-        //         ])->update([
-        //             'check_in'  => $clock,
-        //             'sync_date' => $row->date,
-        //             'updated_at' => Carbon::now()
-        //         ]);
+                if($checkPegawai4 === null || empty($checkPegawai4) || $checkPegawai4 == ''){
+                    // return response()->json($checkPegawai);
+                    $pegawai    = Pegawai::where('pid', $row->pid)->first();
+                if(!is_null($pegawai)){                            
+                    $clock      = date('H:i:s' , strtotime($row->date));
+                    if($row->status == 0 || $row->status == 4){
+                        DB::connection('mysql2')->table($dbName4)->insert([
+                            'pid'       => $row->pid,
+                            'sap'       => $pegawai->sap,
+                            'check_in'  => $clock,
+                            'telat'     => '00:00:00',
+                            'sync_date' => $row->date,
+                            'updated_at' => Carbon::now()
+                        ]);
+                    }else{
+                        DB::connection('mysql2')->table($dbName4)->insert([
+                            'pid'       => $row->pid,
+                            'sap'       => $pegawai->sap,
+                            'check_out'  => $clock,
+                            'telat'     => '00:00:00',
+                            'sync_date' => $row->date,
+                            'updated_at' => Carbon::now()
+                        ]);
+                    }
+                }
+            }else{   
+                $checkAbsen = DB::connection('mysql2')->table($dbName4)->where([
+                    ['pid', $row->pid],
+                    [DB::raw('DATE(sync_date)'), date('Y-m-d', strtotime($row->date))]
+                ])->first();
+                    // return response()->json($checkAbsen);
+            $pegawai    = Pegawai::where('pid', $row->pid)->first();
+            // return response()->json($pegawai);
+            if(!is_null($pegawai)){  
+            $clock      = date('H:i:s' , strtotime($row->date));
+            // return response()->json($clock);
+            if(empty($checkAbsen->check_in) && !empty($checkAbsen->check_out) && $row->status == 0 || $row->status == 4){
+                DB::connection('mysql2')->table($dbName4)->where([
+                    ['pid', $row->pid],
+                    [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
+                ])->update([
+                    'check_in'  => $clock,
+                    'sync_date' => $row->date,
+                    'updated_at' => Carbon::now()
+                ]);
 
-        //     }elseif(empty($checkAbsen->check_out)&& !empty($checkAbsen->check_in && $row->status == 1 || $row->status == 5)){
-        //         DB::connection('mysql2')->table($dbName4)->where([
-        //             ['pid', $row->pid],
-        //             [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
-        //         ])->update([
-        //             'check_out'  => $clock,
-        //             'sync_date' => $row->date,
-        //             'updated_at' => Carbon::now()
-        //         ]);
-        //        }                     
-        //     }
-        //         // return response()->json($pegawai->sap);
-        // }
+            }elseif(empty($checkAbsen->check_out)&& !empty($checkAbsen->check_in && $row->status == 1 || $row->status == 5)){
+                DB::connection('mysql2')->table($dbName4)->where([
+                    ['pid', $row->pid],
+                    [DB::raw('DATE(sync_date)' ), date('Y-m-d',strtotime($row->date))]
+                ])->update([
+                    'check_out'  => $clock,
+                    'sync_date' => $row->date,
+                    'updated_at' => Carbon::now()
+                ]);
+               }                     
+            }
+                // return response()->json($pegawai->sap);
+        }
 
 
                 
