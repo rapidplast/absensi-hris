@@ -72,9 +72,18 @@ class attRController extends Controller
         // $year4      = date('Y', strtotime($year. ' - 1 years'));
         // $year4      = date('Y' , $year4);
         $month      = Carbon::now()->format('m');
+        
+        // $month4     = strtotime($month) + strtotime("-1 month");
+        // $month4     = date('m', $month4);
+        $month4 = Carbon::now()->format('m');
+        $month4 = $month4 - 1;
+        $month4 = "0".$month4;
         $dbName     = $year .''. $month.'HISTORY';
-        $month4     = strtotime($month) + strtotime("-1 month");
-        $month4     = date('m', $month4);
+        // $dbName     = $year .''. $month4.'HISTORY';
+        // return response()->json($dbName);
+
+        // $month4 = Carbon::now()->format('m');
+        // $month4 = date('m', $month4);
         if($month == 1){
             $year       = Carbon::now()->format('Y');
         // $year4      = strtotime($year) + strtotime("-1 years");
@@ -109,17 +118,17 @@ class attRController extends Controller
                         }
                     }                    
                 }
-                if(strtotime($tanggal) === strtotime($tanggal2)){
-                    $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->get();
-                }else{
-                    $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
-                }    
-                // return response()->json($checkAbsen);
-                // if(strtotime('2023-02-28') === strtotime('2023-02-28')){
-                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-02-28')->get();
+                // if(strtotime($tanggal) === strtotime($tanggal2)){
+                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->get();
                 // }else{
-                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-02-28', '2023-02-28'])->get();
-                // }
+                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
+                // }    
+                // return response()->json($checkAbsen);
+                if(strtotime('2023-03-29') === strtotime('2023-03-29')){
+                    $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-03-29')->get();
+                }else{
+                    $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-03-29', '2023-03-29'])->get();
+                }
                 // return response()->json($absenMentah);
                 if(!is_null($absenMentah)){
                     foreach($absenMentah as $row){
@@ -132,12 +141,12 @@ class attRController extends Controller
                         SELECT db.* FROM absensi_frhistory.$dbName4 db
                         WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
                         ");
-                        // return response()->json($checkPegawai);
+                        // return response()->json($dbName);
                         if($checkPegawai === null || empty($checkPegawai) || $checkPegawai == ''){
                             // return response()->json($checkPegawai);
                             $pegawai    = Pegawai::where('pid', $row->pid)->first();
                             $ref = ReferensiKerja::where('id',$pegawai->ref_id)->first();
-                            // return response()->json(empty($ref));
+                            // return response()->json($ref);
                             // if(!empty()){
 
                             // }
@@ -147,7 +156,7 @@ class attRController extends Controller
                             // return response()->json(empty($ref));
                             if(empty($ref)){
                                 if($row->status == 0 || $row->status == 4){
-                                    // return response()->json($row->status);
+                                    // return response()->json(empty($ref));
                                     DB::connection('mysql2')->table($dbName)->insert([
                                         'pid'       => $row->pid,
                                         'sap'       => $pegawai->sap,
@@ -156,6 +165,7 @@ class attRController extends Controller
                                         'sync_date' => $row->date,
                                         'updated_at' => Carbon::now()
                                     ]);
+                                    // return response()->json($a);
                                 }elseif($row->status == 1 || $row->status == 5){
                                     DB::connection('mysql2')->table($dbName)->insert([
                                         'pid'       => $row->pid,
@@ -166,6 +176,7 @@ class attRController extends Controller
                                         'updated_at' => Carbon::now()
                                     ]);
                                 }
+                               
                             }elseif(!empty($ref)){
                             if($row->status == 0 || $row->status == 4){
                                 // return response()->json($row->status);
@@ -192,7 +203,9 @@ class attRController extends Controller
                                 ]);
                             }
                         }
+                        
                     }
+                    // return response()->json($pegawai);
                     }else{   
                         $checkAbsen = DB::connection('mysql2')->table($dbName)->where([
                             ['pid', $row->pid],
