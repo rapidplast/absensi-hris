@@ -118,17 +118,17 @@ class attRController extends Controller
                         }
                     }                    
                 }
-                // if(strtotime($tanggal) === strtotime($tanggal2)){
-                //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->get();
-                // }else{
-                //     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
-                // }    
+                 if(strtotime($tanggal) === strtotime($tanggal2)){
+                     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), $tanggal)->get();
+                 }else{
+                     $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
+                 }    
                 // return response()->json($checkAbsen);
-                if(strtotime('2023-03-29') === strtotime('2023-03-29')){
-                    $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-03-29')->get();
-                }else{
-                    $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-03-29', '2023-03-29'])->get();
-                }
+               // if(strtotime('2023-03-29') === strtotime('2023-03-29')){
+                 //   $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2023-03-29')->get();
+                //}else{
+                  //  $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), ['2023-03-29', '2023-03-29'])->get();
+               // }
                 // return response()->json($absenMentah);
                 if(!is_null($absenMentah)){
                     foreach($absenMentah as $row){

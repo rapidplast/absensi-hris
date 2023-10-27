@@ -36,10 +36,10 @@
                     <div class="card">
                         <div class="card-header bg-primary">
                             <h3 class="card-title">Search Data</h3>
-                            <button type="button" class="btn btn-sm btn-light float-right ml-2" style="border-radius: 50%;"
+                            <!-- <button type="button" class="btn btn-sm btn-light float-right ml-2" style="border-radius: 50%;"
                                 data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                 <i class="fas fa-question"></i>
-                            </button>
+                            </button> -->
                         </div>
                         <form action="{{ route('searchAbsensi') }}" method="POST" enctype="multipart/form-data"
                             id="form-data">
