@@ -130,11 +130,11 @@ class PegawaiController extends Controller
         $month2 = date('m', $month2);
         $month1 = strtotime($month) + strtotime("-4 month");
         $month1 = date('m', $month1);
-        $dbName = $year.''.$month.'HISTORY';
-        $dbName4 = $year.''.$month4.'HISTORY';
-        $dbName3 = $year.''.$month3.'HISTORY';
-        $dbName2 = $year.''.$month2.'HISTORY';
-        $dbName1 = $year.''.$month1.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
+        $dbName4 = $year . str_pad($month4, 2, '0', STR_PAD_LEFT).'HISTORY';;
+        $dbName3 = $year . str_pad($month3, 2, '0', STR_PAD_LEFT).'HISTORY';
+        $dbName2 = $year . str_pad($month2, 2, '0', STR_PAD_LEFT).'HISTORY';
+        $dbName1 = $year . str_pad($month1, 2, '0', STR_PAD_LEFT).'HISTORY';
 
         // ***** Variable for check if table is exist ***** //
         $dbCheck4 = Schema::connection('mysql2')->hasTable($dbName4);

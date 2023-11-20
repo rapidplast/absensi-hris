@@ -506,6 +506,7 @@ class ZKLibrary
         $command = CMD_OPTIONS_PRQ;
         $command_string = '~PIN2Width';
         $return = $this->execCommand($command, $command_string);
+         $net = true;// tambahan kondisi 
         if ($net) {
             $arr = explode("=", $return, 2);
             return $arr[1];

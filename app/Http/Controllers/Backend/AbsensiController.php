@@ -45,7 +45,8 @@ class AbsensiController extends Controller
             $tanggalCetak = Carbon::now()->format('Y-m-d');
             $year = Carbon::now()->format('Y');
             $month = Carbon::now()->format('m');
-            $dbName = $year.''.$month.'HISTORY';
+            // $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
+            $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
 
             // $absensi = Absen::all();
             $date = Carbon::now()->format('Y-m-d');
@@ -61,7 +62,7 @@ class AbsensiController extends Controller
             $date = Carbon::now()->format('Y-m-d');
             $year = date('Y', strtotime($request->tanggal));
             $month = date('m', strtotime($request->tanggal));
-            $dbName = $year.''.$month.'HISTORY';
+            $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
             $tanggal = date('Y-m-d', strtotime($request->tanggal));
             $tanggal2 = date('Y-m-d', strtotime($request->tanggal2));
             $tanggalCetak = date('Y-m-d', strtotime($request->tanggal));
@@ -72,6 +73,15 @@ class AbsensiController extends Controller
                 WHERE p.pid = afh.pid AND DATE(sync_date) >= '$tanggal' AND DATE(sync_date) <= '$tanggal2'
                 ORDER BY afh.id DESC"
             );
+            // dd pengecekan
+            // dd($absensi);
+
+            // $queryToExecute = "SELECT afh.id, afh.pid, p.nama, p.departement, afh.check_in, afh.check_out, afh.telat, afh.izin, afh.check_in1, afh.check_out1, afh.check_in2, afh.check_out2, afh.check_in3, afh.check_out3, afh.sync_date, afh.absen1, afh.absen2
+            // FROM absensi_fingerprint.pegawais p, absensi_frhistory.$dbName afh
+            // WHERE p.pid = afh.pid AND DATE(afh.sync_date) = '$date'
+            // ORDER BY afh.id DESC";
+
+            // dd($queryToExecute);
 
             return view('admin.absensi.index', compact(['absensi', 'tanggal', 'date', 'tanggal2', 'tanggalCetak', 'dbName']));
         }
@@ -84,7 +94,7 @@ class AbsensiController extends Controller
         $mesin  = Mesin::where('is_default', 1)->first();
         $year = Carbon::now()->format('Y');
         $month = Carbon::now()->format('m');
-        $dbName = $year.''.$month.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
         $port = 4370;
 
         $zk = new ZKLibrary($mesin->tcpip, $port);
@@ -119,6 +129,8 @@ class AbsensiController extends Controller
             }else{
                 $absenMentah = AbsenMentah::whereBetween(DB::raw('DATE(date)'), [$tanggal, $tanggal2])->get();
             }
+            // dd pengecekan
+            // dd($absenMentah);
             
             // if(strtotime('2022-11-09') === strtotime('2022-11-09')){
             //     $absenMentah = AbsenMentah::where(DB::raw('DATE(date)'), '2022-11-09')->get();
@@ -136,6 +148,8 @@ class AbsensiController extends Controller
                         FROM absensi_frhistory.$dbName db
                         WHERE db.pid = '$row->pid' AND DATE(db.sync_date) = '$checkDate'
                     ");
+                    // dd pengecekan
+                    // dd($checkPegawai);
 
                 //     $checkPegawai = DB::select("
                 //     SELECT db.* 
@@ -495,7 +509,7 @@ class AbsensiController extends Controller
         $month2 = date('m', $month2);
         $month1 = strtotime($month) + strtotime("-4 month");
         $month1 = date('m', $month1);
-        $dbName = $year.''.$month.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
         $dbName4 = $year.''.$month4.'HISTORY';
         $dbName3 = $year.''.$month3.'HISTORY';
         $dbName2 = $year.''.$month2.'HISTORY';
@@ -674,7 +688,7 @@ class AbsensiController extends Controller
         $month1 = strtotime($month) + strtotime("-4 month");
         $month1 = date('m', $month1);
         
-        $dbName = $year.''.$month.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
         $dbName4 = $year4.''.$month4.'HISTORY';
         // dd($dbName4);
         $dbName3 = $year.''.$month3.'HISTORY';
@@ -1129,7 +1143,7 @@ class AbsensiController extends Controller
         // return response()->json($date);
         $year   = Carbon::now()->format('Y');
         $month  = Carbon::now()->format('m');
-        $dbName = $year.''.$month.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
         if($month == 1){
             $year       = Carbon::now()->format('Y');
         // $year4      = strtotime($year) + strtotime("-1 years");
@@ -1147,7 +1161,7 @@ class AbsensiController extends Controller
         $month2 = date('m', $month2);
         $month1 = strtotime($month) + strtotime("-4 month");
         $month1 = date('m', $month1);
-        $dbName = $year.''.$month.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
         $dbName4 = $year4.''.$month4.'HISTORY';
         $dbName3 = $year.''.$month3.'HISTORY';
         $dbName2 = $year.''.$month2.'HISTORY';
@@ -1503,7 +1517,7 @@ class AbsensiController extends Controller
         $month2 = date('m', $month2);
         $month1 = strtotime($month) + strtotime("-4 month");
         $month1 = date('m', $month1);
-        $dbName = $year.''.$month.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
         $dbName4 = $year.''.$month4.'HISTORY';
         $dbName3 = $year.''.$month3.'HISTORY';
         $dbName2 = $year.''.$month2.'HISTORY';
@@ -1557,7 +1571,7 @@ class AbsensiController extends Controller
         $mesin  = Mesin::where('is_default', 1)->first();
         $year = Carbon::now()->format('Y');
         $month = Carbon::now()->format('m');
-        $dbName = $year.''.$month.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
         $port = 4370;
 
         $zk = new ZKLibrary($mesin->tcpip, $port);

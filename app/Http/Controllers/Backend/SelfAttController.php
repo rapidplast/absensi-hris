@@ -35,7 +35,7 @@ class SelfAttController extends Controller
             $tanggalCetak = Carbon::now()->format('Y-m-d');
             $year = Carbon::now()->format('Y');
             $month = Carbon::now()->format('m');
-            $dbName = $year.''.$month.'HISTORY';
+            $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
 
             // $absensi = Absen::all();
             $date = Carbon::now()->format('Y-m-d');
@@ -53,7 +53,7 @@ class SelfAttController extends Controller
             $date = Carbon::now()->format('Y-m-d');
             $year = date('Y', strtotime($request->tanggal));
             $month = date('m', strtotime($request->tanggal));
-            $dbName = $year.''.$month.'HISTORY';
+            $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
             $tanggal = date('Y-m-d', strtotime($request->tanggal));
             $tanggal2 = date('Y-m-d', strtotime($request->tanggal2));
             $tanggalCetak = date('Y-m-d', strtotime($request->tanggal));

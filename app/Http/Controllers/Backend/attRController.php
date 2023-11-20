@@ -31,7 +31,7 @@ class attRController extends Controller
             $tanggalCetak = Carbon::now()->format('Y-m-d');
             $year = Carbon::now()->format('Y');
             $month = Carbon::now()->format('m');
-            $dbName = $year.''.$month.'HISTORY';
+            $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
 
             // $absensi = Absen::all();
             $date = Carbon::now()->format('Y-m-d');
@@ -46,7 +46,7 @@ class attRController extends Controller
             $date = Carbon::now()->format('Y-m-d');
             $year = date('Y', strtotime($request->tanggal));
             $month = date('m', strtotime($request->tanggal));
-            $dbName = $year.''.$month.'HISTORY';
+            $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
             $tanggal = date('Y-m-d', strtotime($request->tanggal));
             $tanggal2 = date('Y-m-d', strtotime($request->tanggal2));
             $tanggalCetak = date('Y-m-d', strtotime($request->tanggal));
@@ -78,7 +78,7 @@ class attRController extends Controller
         $month4 = Carbon::now()->format('m');
         $month4 = $month4 - 1;
         $month4 = "0".$month4;
-        $dbName     = $year .''. $month.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
         // $dbName     = $year .''. $month4.'HISTORY';
         // return response()->json($dbName);
 
@@ -92,7 +92,7 @@ class attRController extends Controller
             $year4      = Carbon::now()->format('Y');;
         }
         // return response()->json($year4);
-        $dbName4    = $year4.''.$month4.'HISTORY';
+        $dbName4 = $year4 . str_pad($month4, 2, '0', STR_PAD_LEFT).'HISTORY';
         $port       = 4370;
         // return response()->json($dbName4);
         $zk         = new ZKLibrary($mesin->tcpip,$port);
@@ -150,7 +150,7 @@ class attRController extends Controller
                             // if(!empty()){
 
                             // }
-                        if(!is_null($pegawai)){                  
+                        if(!is_null($pegawai)){
                             // return response()->json($pegawai);          
                             $clock      = date('H:i:s' , strtotime($row->date));
                             // return response()->json(empty($ref));
@@ -299,7 +299,7 @@ class attRController extends Controller
                     'updated_at' => Carbon::now()
                 ]);
                }                     
-            }
+            }   
                 // return response()->json($pegawai->sap);
         }
 

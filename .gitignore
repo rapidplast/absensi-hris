@@ -1,3 +1,4 @@
 .env
 sonar-scanner
 Jenkinsfile
+node_modules

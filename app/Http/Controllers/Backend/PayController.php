@@ -48,7 +48,7 @@ class PayController extends Controller
 
             $year = Carbon::now()->format('Y');
             $month = Carbon::now()->format('m');
-            $dbName = $year.''.$month.'HISTORY';
+            $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
             $refin = Carbon::now()->format('h:i:s');
             $refout = Carbon::now()->format('h:i:s');
             $divisi = Divisi::all();            
@@ -165,7 +165,7 @@ class PayController extends Controller
             $date = Carbon::now()->format('Y-m-d');
             $year = date('Y', strtotime($request->tanggal));
             $month = date('m', strtotime($request->tanggal));
-            $dbName = $year.''.$month.'HISTORY';
+            $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
             $tanggal = date('Y-m-d', strtotime($request->tanggal));
             $tanggal2 = date('Y-m-d', strtotime($request->tanggal2));
             $tanggalCetak = date('Y-m-d', strtotime($request->tanggal));
@@ -288,7 +288,7 @@ IF
             $date = Carbon::now()->format('Y-m-d');
             $year = date('Y', strtotime($request->tanggal));
             $month = date('m', strtotime($request->tanggal));
-            $dbName = $year.''.$month.'HISTORY';
+            $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
             $tanggal = date('Y-m-d', strtotime($request->tanggal));
             $tanggal2 = date('Y-m-d', strtotime($request->tanggal2));
             $tanggalCetak = date('Y-m-d', strtotime($request->tanggal));
@@ -439,7 +439,7 @@ IF
         $date = Carbon::now()->format('Y-m-d');
         $year = date('Y', strtotime($request->tanggal));
         $month = date('m', strtotime($request->tanggal));
-        $dbName = $year.''.$month.'HISTORY';
+        $dbName = $year . str_pad($month, 2, '0', STR_PAD_LEFT).'HISTORY';
         $tanggal = date('Y-m-d', strtotime($request->tanggal));
         $tanggal2 = date('Y-m-d', strtotime($request->tanggal2));
         $tanggalCetak = date('Y-m-d', strtotime($request->tanggal));
