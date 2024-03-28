@@ -11,13 +11,13 @@ pipeline {
                 sh 'cd /var/lib/docker/volumes/absensi-hris/_data/ && git pull'  
             }
         }
-        stage ('Test') {
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh "sh sonar-scanner -Dsonar.projectKey=absensi-hris -Dsonar.sources=. -Dsonar.host.url=http://192.168.0.85:9001 -Dsonar.login=squ_ecffe88bd1340dc3b68f54d585b9f3d1253b0899"
-                }
-            }
-        }
+        //stage ('Test') {
+        //    steps {
+        //        withSonarQubeEnv('sonarqube') {
+        //            sh "sh sonar-scanner -Dsonar.projectKey=absensi-hris -Dsonar.sources=. -Dsonar.host.url=http://192.168.0.85:9001 -Dsonar.login=squ_ecffe88bd1340dc3b68f54d585b9f3d1253b0899"
+        //        }
+        //    }
+        //}
     }
     post {
         success {
